@@ -457,6 +457,7 @@ def run_backtest_mode(markets_data):
         except Exception as e:
             print(f"❌ {market:<25} | Error: {e}")
 
+
     print(f"\n{'=' * 70}")
     if all_rates:
         mean_rate = np.mean(all_rates)
@@ -479,6 +480,9 @@ def run_backtest_mode(markets_data):
 
         print(f"\n📁 Dashboards: {os.path.abspath(DASHBOARD_DIR)}  ({dashboard_count} generated)")
     print(f"{'=' * 70}")
+
+
+
 
 # ============================================================
 # 9. MAIN
