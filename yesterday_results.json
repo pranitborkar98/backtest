@@ -1,0 +1,1298 @@
+[
+  {
+    "market": "andhra_day",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "5",
+    "Open Panna": "899",
+    "Close Panna": "168",
+    "Jodi": "65"
+  },
+  {
+    "market": "andhra_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "6",
+    "Open Panna": "467",
+    "Close Panna": "114",
+    "Jodi": "76"
+  },
+  {
+    "market": "andhra_night",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "9",
+    "Open Panna": "134",
+    "Close Panna": "388",
+    "Jodi": "89"
+  },
+  {
+    "market": "apla_bazar_day",
+    "Date": "2026-03-09",
+    "Open Digit": "2",
+    "Close Digit": "8",
+    "Open Panna": "679",
+    "Close Panna": "800",
+    "Jodi": "28"
+  },
+  {
+    "market": "apla_bazar_night",
+    "Date": "2026-03-09",
+    "Open Digit": "8",
+    "Close Digit": "1",
+    "Open Panna": "233",
+    "Close Panna": "137",
+    "Jodi": "81"
+  },
+  {
+    "market": "asha_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "8",
+    "Open Panna": "788",
+    "Close Panna": "378",
+    "Jodi": "38"
+  },
+  {
+    "market": "bombay_day",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "7",
+    "Open Panna": "470",
+    "Close Panna": "160",
+    "Jodi": "17"
+  },
+  {
+    "market": "bombay_night",
+    "Date": "2026-09-25",
+    "Open Digit": "2",
+    "Close Digit": "5",
+    "Open Panna": "129",
+    "Close Panna": "230",
+    "Jodi": "25"
+  },
+  {
+    "market": "bombay_rajshree_day",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "6",
+    "Open Panna": "269",
+    "Close Panna": "259",
+    "Jodi": "76"
+  },
+  {
+    "market": "bombay_rajshree_night",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "2",
+    "Open Panna": "128",
+    "Close Panna": "200",
+    "Jodi": "12"
+  },
+  {
+    "market": "cb",
+    "Date": "2026-09-26",
+    "Open Digit": "0",
+    "Close Digit": "1",
+    "Open Panna": "569",
+    "Close Panna": "678",
+    "Jodi": "1"
+  },
+  {
+    "market": "central_bombay",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "9",
+    "Open Panna": "368",
+    "Close Panna": "144",
+    "Jodi": "79"
+  },
+  {
+    "market": "central_mumbai",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "3",
+    "Open Panna": "349",
+    "Close Panna": "256",
+    "Jodi": "63"
+  },
+  {
+    "market": "chandni_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "6",
+    "Open Panna": "579",
+    "Close Panna": "240",
+    "Jodi": "16"
+  },
+  {
+    "market": "country_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "4",
+    "Open Panna": "368",
+    "Close Panna": "167",
+    "Jodi": "74"
+  },
+  {
+    "market": "day_bombay",
+    "Date": "2026-07-01",
+    "Open Digit": "8",
+    "Close Digit": "7",
+    "Open Panna": "260",
+    "Close Panna": "359",
+    "Jodi": "87"
+  },
+  {
+    "market": "delhi_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "3",
+    "Open Panna": "249",
+    "Close Panna": "346",
+    "Jodi": "53"
+  },
+  {
+    "market": "diamond",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "0",
+    "Open Panna": "580",
+    "Close Panna": "569",
+    "Jodi": "30"
+  },
+  {
+    "market": "diamond_night",
+    "Date": "2026-09-25",
+    "Open Digit": "0",
+    "Close Digit": "4",
+    "Open Panna": "370",
+    "Close Panna": "680",
+    "Jodi": "4"
+  },
+  {
+    "market": "durga_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "8",
+    "Open Panna": "249",
+    "Close Panna": "468",
+    "Jodi": "58"
+  },
+  {
+    "market": "geeta_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "0",
+    "Close Digit": "3",
+    "Open Panna": "226",
+    "Close Panna": "355",
+    "Jodi": "3"
+  },
+  {
+    "market": "gowa",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "9",
+    "Open Panna": "123",
+    "Close Panna": "180",
+    "Jodi": "69"
+  },
+  {
+    "market": "gujrat_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "2",
+    "Open Panna": "500",
+    "Close Panna": "778",
+    "Jodi": "52"
+  },
+  {
+    "market": "gujrat_night",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "0",
+    "Open Panna": "790",
+    "Close Panna": "578",
+    "Jodi": "60"
+  },
+  {
+    "market": "janta_day",
+    "Date": "2026-04-28",
+    "Open Digit": "1",
+    "Close Digit": "7",
+    "Open Panna": "678",
+    "Close Panna": "278",
+    "Jodi": "17"
+  },
+  {
+    "market": "janta_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "6",
+    "Open Panna": "124",
+    "Close Panna": "123",
+    "Jodi": "76"
+  },
+  {
+    "market": "jay_shree_day",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "9",
+    "Open Panna": "450",
+    "Close Panna": "289",
+    "Jodi": "99"
+  },
+  {
+    "market": "kaali",
+    "Date": "2026-09-25",
+    "Open Digit": "9",
+    "Close Digit": "3",
+    "Open Panna": "270",
+    "Close Panna": "490",
+    "Jodi": "93"
+  },
+  {
+    "market": "kalyan",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "6",
+    "Open Panna": "290",
+    "Close Panna": "114",
+    "Jodi": "16"
+  },
+  {
+    "market": "kalyan_express",
+    "Date": "2026-05-02",
+    "Open Digit": "6",
+    "Close Digit": "2",
+    "Open Panna": "268",
+    "Close Panna": "147",
+    "Jodi": "62"
+  },
+  {
+    "market": "kalyan_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "7",
+    "Open Panna": "225",
+    "Close Panna": "269",
+    "Jodi": "97"
+  },
+  {
+    "market": "kalyan_night",
+    "Date": "2026-09-25",
+    "Open Digit": "0",
+    "Close Digit": "0",
+    "Open Panna": "190",
+    "Close Panna": "127",
+    "Jodi": "0"
+  },
+  {
+    "market": "kalyan_sai_day",
+    "Date": "2026-05-20",
+    "Open Digit": "1",
+    "Close Digit": "7",
+    "Open Panna": "146",
+    "Close Panna": "340",
+    "Jodi": "17"
+  },
+  {
+    "market": "kalyan_sridevi",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "1",
+    "Open Panna": "188",
+    "Close Panna": "579",
+    "Jodi": "71"
+  },
+  {
+    "market": "kalyan_sridevi_night",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "7",
+    "Open Panna": "899",
+    "Close Panna": "890",
+    "Jodi": "67"
+  },
+  {
+    "market": "kamal_day",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "7",
+    "Open Panna": "345",
+    "Close Panna": "458",
+    "Jodi": "27"
+  },
+  {
+    "market": "kamal_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "4",
+    "Open Panna": "556",
+    "Close Panna": "789",
+    "Jodi": "64"
+  },
+  {
+    "market": "kamal_night",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "8",
+    "Open Panna": "367",
+    "Close Panna": "125",
+    "Jodi": "68"
+  },
+  {
+    "market": "karnataka_day",
+    "Date": "2026-12-08",
+    "Open Digit": "1",
+    "Close Digit": "9",
+    "Open Panna": "119",
+    "Close Panna": "450",
+    "Jodi": "19"
+  },
+  {
+    "market": "khatri_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "0",
+    "Open Panna": "337",
+    "Close Panna": "145",
+    "Jodi": "30"
+  },
+  {
+    "market": "laxmi_day",
+    "Date": "2026-03-02",
+    "Open Digit": "8",
+    "Close Digit": "3",
+    "Open Panna": "350",
+    "Close Panna": "157",
+    "Jodi": "83"
+  },
+  {
+    "market": "laxmi_night",
+    "Date": "2026-03-02",
+    "Open Digit": "4",
+    "Close Digit": "4",
+    "Open Panna": "130",
+    "Close Panna": "158",
+    "Jodi": "44"
+  },
+  {
+    "market": "lokseva_day",
+    "Date": "2026-02-24",
+    "Open Digit": "1",
+    "Close Digit": "1",
+    "Open Panna": "146",
+    "Close Panna": "245",
+    "Jodi": "11"
+  },
+  {
+    "market": "madhur_day",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "0",
+    "Open Panna": "468",
+    "Close Panna": "460",
+    "Jodi": "80"
+  },
+  {
+    "market": "madhur_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "7",
+    "Open Panna": "134",
+    "Close Panna": "449",
+    "Jodi": "87"
+  },
+  {
+    "market": "madhur_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "3",
+    "Open Panna": "177",
+    "Close Panna": "445",
+    "Jodi": "53"
+  },
+  {
+    "market": "madhuri",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "4",
+    "Open Panna": "357",
+    "Close Panna": "248",
+    "Jodi": "54"
+  },
+  {
+    "market": "madhuri_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "3",
+    "Open Panna": "780",
+    "Close Panna": "120",
+    "Jodi": "53"
+  },
+  {
+    "market": "mahadevi",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "1",
+    "Open Panna": "680",
+    "Close Panna": "236",
+    "Jodi": "41"
+  },
+  {
+    "market": "mahadevi_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "4",
+    "Open Panna": "900",
+    "Close Panna": "149",
+    "Jodi": "94"
+  },
+  {
+    "market": "mahadevi_night",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "5",
+    "Open Panna": "146",
+    "Close Panna": "348",
+    "Jodi": "15"
+  },
+  {
+    "market": "maharani",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "2",
+    "Open Panna": "360",
+    "Close Panna": "778",
+    "Jodi": "92"
+  },
+  {
+    "market": "maharani_day",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "2",
+    "Open Panna": "336",
+    "Close Panna": "246",
+    "Jodi": "22"
+  },
+  {
+    "market": "maharani_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "9",
+    "Open Panna": "357",
+    "Close Panna": "289",
+    "Jodi": "59"
+  },
+  {
+    "market": "main_bazar",
+    "Date": "2026-09-25",
+    "Open Digit": "2",
+    "Close Digit": "4",
+    "Open Panna": "570",
+    "Close Panna": "158",
+    "Jodi": "24"
+  },
+  {
+    "market": "main_bazar_day",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "6",
+    "Open Panna": "120",
+    "Close Panna": "169",
+    "Jodi": "36"
+  },
+  {
+    "market": "main_bazar_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "2",
+    "Open Panna": "680",
+    "Close Panna": "570",
+    "Jodi": "42"
+  },
+  {
+    "market": "main_mumbai_night",
+    "Date": "2026-09-25",
+    "Open Digit": "3",
+    "Close Digit": "4",
+    "Open Panna": "139",
+    "Close Panna": "149",
+    "Jodi": "34"
+  },
+  {
+    "market": "main_mumbai_rk",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "7",
+    "Open Panna": "146",
+    "Close Panna": "115",
+    "Jodi": "17"
+  },
+  {
+    "market": "mangal_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "0",
+    "Open Panna": "236",
+    "Close Panna": "334",
+    "Jodi": "10"
+  },
+  {
+    "market": "mangal_day",
+    "Date": "2026-09-26",
+    "Open Digit": "0",
+    "Close Digit": "1",
+    "Open Panna": "578",
+    "Close Panna": "380",
+    "Jodi": "1"
+  },
+  {
+    "market": "mangal_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "9",
+    "Open Panna": "257",
+    "Close Panna": "469",
+    "Jodi": "49"
+  },
+  {
+    "market": "mangal_night",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "3",
+    "Open Panna": "489",
+    "Close Panna": "148",
+    "Jodi": "13"
+  },
+  {
+    "market": "maya_bazar",
+    "Date": "2026-09-25",
+    "Open Digit": "3",
+    "Close Digit": "0",
+    "Open Panna": "229",
+    "Close Panna": "479",
+    "Jodi": "30"
+  },
+  {
+    "market": "meena_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "2",
+    "Open Panna": "778",
+    "Close Panna": "570",
+    "Jodi": "22"
+  },
+  {
+    "market": "meena_bazar_day",
+    "Date": "2026-07-02",
+    "Open Digit": "2",
+    "Close Digit": "0",
+    "Open Panna": "200",
+    "Close Panna": "389",
+    "Jodi": "20"
+  },
+  {
+    "market": "meena_bazar_night",
+    "Date": "2026-04-02",
+    "Open Digit": "3",
+    "Close Digit": "6",
+    "Open Panna": "490",
+    "Close Panna": "123",
+    "Jodi": "36"
+  },
+  {
+    "market": "meena_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "2",
+    "Open Panna": "366",
+    "Close Panna": "480",
+    "Jodi": "52"
+  },
+  {
+    "market": "milan_bazar_day",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "3",
+    "Open Panna": "349",
+    "Close Panna": "256",
+    "Jodi": "63"
+  },
+  {
+    "market": "milan_bazar_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "9",
+    "Open Panna": "158",
+    "Close Panna": "270",
+    "Jodi": "49"
+  },
+  {
+    "market": "milan_bazar_night",
+    "Date": "2026-09-27",
+    "Open Digit": "0",
+    "Close Digit": "4",
+    "Open Panna": "235",
+    "Close Panna": "455",
+    "Jodi": "4"
+  },
+  {
+    "market": "milan_day",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "4",
+    "Open Panna": "379",
+    "Close Panna": "789",
+    "Jodi": "94"
+  },
+  {
+    "market": "milan_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "3",
+    "Open Panna": "670",
+    "Close Panna": "148",
+    "Jodi": "33"
+  },
+  {
+    "market": "milan_night",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "5",
+    "Open Panna": "125",
+    "Close Panna": "230",
+    "Jodi": "85"
+  },
+  {
+    "market": "mohini",
+    "Date": "2026-08-07",
+    "Open Digit": "5",
+    "Close Digit": "8",
+    "Open Panna": "267",
+    "Close Panna": "170",
+    "Jodi": "58"
+  },
+  {
+    "market": "mumbai_bazar",
+    "Date": "2026-05-02",
+    "Open Digit": "0",
+    "Close Digit": "3",
+    "Open Panna": "334",
+    "Close Panna": "580",
+    "Jodi": "3"
+  },
+  {
+    "market": "mumbai_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "9",
+    "Open Panna": "178",
+    "Close Panna": "289",
+    "Jodi": "69"
+  },
+  {
+    "market": "new_time_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "1",
+    "Open Panna": "450",
+    "Close Panna": "128",
+    "Jodi": "91"
+  },
+  {
+    "market": "night_bombay",
+    "Date": "2026-07-01",
+    "Open Digit": "7",
+    "Close Digit": "6",
+    "Open Panna": "458",
+    "Close Panna": "114",
+    "Jodi": "76"
+  },
+  {
+    "market": "ntr_day",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "3",
+    "Open Panna": "469",
+    "Close Panna": "580",
+    "Jodi": "93"
+  },
+  {
+    "market": "ntr_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "2",
+    "Open Panna": "224",
+    "Close Panna": "390",
+    "Jodi": "82"
+  },
+  {
+    "market": "ntr_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "9",
+    "Open Panna": "690",
+    "Close Panna": "450",
+    "Jodi": "59"
+  },
+  {
+    "market": "old_main_mumbai",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "5",
+    "Open Panna": "390",
+    "Close Panna": "140",
+    "Jodi": "25"
+  },
+  {
+    "market": "padmavathi",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "9",
+    "Open Panna": "130",
+    "Close Panna": "450",
+    "Jodi": "49"
+  },
+  {
+    "market": "padmavathi_night",
+    "Date": "2026-09-26",
+    "Open Digit": "0",
+    "Close Digit": "7",
+    "Open Panna": "334",
+    "Close Panna": "179",
+    "Jodi": "1"
+  },
+  {
+    "market": "parel_day",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "7",
+    "Open Panna": "360",
+    "Close Panna": "890",
+    "Jodi": "97"
+  },
+  {
+    "market": "parvati",
+    "Date": "2026-03-18",
+    "Open Digit": "3",
+    "Close Digit": "2",
+    "Open Panna": "670",
+    "Close Panna": "129",
+    "Jodi": "32"
+  },
+  {
+    "market": "prabhat",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "3",
+    "Open Panna": "390",
+    "Close Panna": "670",
+    "Jodi": "23"
+  },
+  {
+    "market": "prabhat_night",
+    "Date": "2026-09-25",
+    "Open Digit": "2",
+    "Close Digit": "5",
+    "Open Panna": "679",
+    "Close Panna": "159",
+    "Jodi": "25"
+  },
+  {
+    "market": "puna_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "0",
+    "Open Panna": "125",
+    "Close Panna": "578",
+    "Jodi": "80"
+  },
+  {
+    "market": "puna_night_main",
+    "Date": "2026-09-25",
+    "Open Digit": "7",
+    "Close Digit": "2",
+    "Open Panna": "449",
+    "Close Panna": "237",
+    "Jodi": "72"
+  },
+  {
+    "market": "rajdhani_day",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "8",
+    "Open Panna": "249",
+    "Close Panna": "279",
+    "Jodi": "58"
+  },
+  {
+    "market": "rajdhani_morning_main",
+    "Date": "2026-08-31",
+    "Open Digit": "1",
+    "Close Digit": "9",
+    "Open Panna": "380",
+    "Close Panna": "135",
+    "Jodi": "19"
+  },
+  {
+    "market": "rajdhani_night",
+    "Date": "2026-09-25",
+    "Open Digit": "6",
+    "Close Digit": "0",
+    "Open Panna": "150",
+    "Close Panna": "280",
+    "Jodi": "60"
+  },
+  {
+    "market": "rakhi_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "0",
+    "Open Panna": "290",
+    "Close Panna": "190",
+    "Jodi": "10"
+  },
+  {
+    "market": "ratan_khatri",
+    "Date": "2026-09-25",
+    "Open Digit": "6",
+    "Close Digit": "2",
+    "Open Panna": "259",
+    "Close Panna": "679",
+    "Jodi": "62"
+  },
+  {
+    "market": "ratna_day",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "9",
+    "Open Panna": "470",
+    "Close Panna": "388",
+    "Jodi": "19"
+  },
+  {
+    "market": "ratna_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "0",
+    "Open Panna": "248",
+    "Close Panna": "578",
+    "Jodi": "40"
+  },
+  {
+    "market": "ratna_night",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "3",
+    "Open Panna": "499",
+    "Close Panna": "689",
+    "Jodi": "23"
+  },
+  {
+    "market": "rose_bazar_day",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "1",
+    "Open Panna": "239",
+    "Close Panna": "146",
+    "Jodi": "41"
+  },
+  {
+    "market": "rose_bazar_night",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "0",
+    "Open Panna": "789",
+    "Close Panna": "389",
+    "Jodi": "40"
+  },
+  {
+    "market": "sahara",
+    "Date": "2026-04-07",
+    "Open Digit": "4",
+    "Close Digit": "0",
+    "Open Panna": "239",
+    "Close Panna": "145",
+    "Jodi": "40"
+  },
+  {
+    "market": "samrat_bazar",
+    "Date": "2026-03-23",
+    "Open Digit": "2",
+    "Close Digit": "1",
+    "Open Panna": "499",
+    "Close Panna": "227",
+    "Jodi": "21"
+  },
+  {
+    "market": "shri_day",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "4",
+    "Open Panna": "166",
+    "Close Panna": "356",
+    "Jodi": "34"
+  },
+  {
+    "market": "shri_night",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "8",
+    "Open Panna": "279",
+    "Close Panna": "567",
+    "Jodi": "88"
+  },
+  {
+    "market": "sita_day",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "2",
+    "Open Panna": "147",
+    "Close Panna": "570",
+    "Jodi": "22"
+  },
+  {
+    "market": "sita_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "7",
+    "Open Panna": "490",
+    "Close Panna": "115",
+    "Jodi": "37"
+  },
+  {
+    "market": "sita_night",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "6",
+    "Open Panna": "360",
+    "Close Panna": "457",
+    "Jodi": "96"
+  },
+  {
+    "market": "sitara_bazar",
+    "Date": "2026-09-25",
+    "Open Digit": "8",
+    "Close Digit": "7",
+    "Open Panna": "279",
+    "Close Panna": "359",
+    "Jodi": "87"
+  },
+  {
+    "market": "sri_dhanalaxmi",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "6",
+    "Open Panna": "477",
+    "Close Panna": "259",
+    "Jodi": "86"
+  },
+  {
+    "market": "sridevi",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "0",
+    "Open Panna": "359",
+    "Close Panna": "479",
+    "Jodi": "70"
+  },
+  {
+    "market": "sridevi_day",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "3",
+    "Open Panna": "456",
+    "Close Panna": "599",
+    "Jodi": "53"
+  },
+  {
+    "market": "sridevi_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "4",
+    "Open Panna": "114",
+    "Close Panna": "455",
+    "Jodi": "64"
+  },
+  {
+    "market": "sridevi_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "9",
+    "Open Panna": "447",
+    "Close Panna": "180",
+    "Jodi": "59"
+  },
+  {
+    "market": "srilakshmi",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "4",
+    "Open Panna": "258",
+    "Close Panna": "400",
+    "Jodi": "54"
+  },
+  {
+    "market": "srilaxmi_day",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "0",
+    "Open Panna": "889",
+    "Close Panna": "136",
+    "Jodi": "50"
+  },
+  {
+    "market": "star_tara_day",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "3",
+    "Open Panna": "268",
+    "Close Panna": "599",
+    "Jodi": "63"
+  },
+  {
+    "market": "star_tara_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "0",
+    "Open Panna": "128",
+    "Close Panna": "569",
+    "Jodi": "10"
+  },
+  {
+    "market": "star_tara_night",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "8",
+    "Open Panna": "468",
+    "Close Panna": "279",
+    "Jodi": "88"
+  },
+  {
+    "market": "sunday_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "3",
+    "Open Panna": "100",
+    "Close Panna": "148",
+    "Jodi": "13"
+  },
+  {
+    "market": "super_day",
+    "Date": "2026-09-26",
+    "Open Digit": "8",
+    "Close Digit": "1",
+    "Open Panna": "440",
+    "Close Panna": "470",
+    "Jodi": "81"
+  },
+  {
+    "market": "super_goa_day",
+    "Date": "2026-07-26",
+    "Open Digit": "8",
+    "Close Digit": "5",
+    "Open Panna": "468",
+    "Close Panna": "230",
+    "Jodi": "85"
+  },
+  {
+    "market": "super_king",
+    "Date": "2026-09-26",
+    "Open Digit": "0",
+    "Close Digit": "9",
+    "Open Panna": "136",
+    "Close Panna": "667",
+    "Jodi": "9"
+  },
+  {
+    "market": "super_king_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "8",
+    "Open Panna": "889",
+    "Close Panna": "134",
+    "Jodi": "58"
+  },
+  {
+    "market": "super_milan_day",
+    "Date": "2026-04-29",
+    "Open Digit": "6",
+    "Close Digit": "2",
+    "Open Panna": "880",
+    "Close Panna": "110",
+    "Jodi": "62"
+  },
+  {
+    "market": "super_milan_night",
+    "Date": "2026-04-28",
+    "Open Digit": "4",
+    "Close Digit": "1",
+    "Open Panna": "149",
+    "Close Panna": "245",
+    "Jodi": "41"
+  },
+  {
+    "market": "super_morning",
+    "Date": "2026-05-13",
+    "Open Digit": "2",
+    "Close Digit": "7",
+    "Open Panna": "129",
+    "Close Panna": "179",
+    "Jodi": "27"
+  },
+  {
+    "market": "super_night",
+    "Date": "2026-09-25",
+    "Open Digit": "9",
+    "Close Digit": "3",
+    "Open Panna": "469",
+    "Close Panna": "148",
+    "Jodi": "93"
+  },
+  {
+    "market": "super_time",
+    "Date": "2026-09-26",
+    "Open Digit": "6",
+    "Close Digit": "7",
+    "Open Panna": "358",
+    "Close Panna": "115",
+    "Jodi": "67"
+  },
+  {
+    "market": "supreme_day",
+    "Date": "2026-09-26",
+    "Open Digit": "0",
+    "Close Digit": "6",
+    "Open Panna": "127",
+    "Close Panna": "240",
+    "Jodi": "6"
+  },
+  {
+    "market": "supreme_night",
+    "Date": "2026-09-25",
+    "Open Digit": "2",
+    "Close Digit": "2",
+    "Open Panna": "129",
+    "Close Panna": "570",
+    "Jodi": "22"
+  },
+  {
+    "market": "tara_mumbai_day",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "3",
+    "Open Panna": "137",
+    "Close Panna": "247",
+    "Jodi": "13"
+  },
+  {
+    "market": "tara_mumbai_night",
+    "Date": "2026-09-25",
+    "Open Digit": "3",
+    "Close Digit": "8",
+    "Open Panna": "490",
+    "Close Panna": "260",
+    "Jodi": "38"
+  },
+  {
+    "market": "teen_patti",
+    "Date": "2026-09-26",
+    "Open Digit": "2",
+    "Close Digit": "5",
+    "Open Panna": "778",
+    "Close Panna": "348",
+    "Jodi": "25"
+  },
+  {
+    "market": "time_bazar",
+    "Date": "2026-09-26",
+    "Open Digit": "7",
+    "Close Digit": "4",
+    "Open Panna": "566",
+    "Close Panna": "257",
+    "Jodi": "74"
+  },
+  {
+    "market": "time_bazar_day",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "0",
+    "Open Panna": "167",
+    "Close Panna": "569",
+    "Jodi": "40"
+  },
+  {
+    "market": "time_bazar_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "3",
+    "Open Panna": "689",
+    "Close Panna": "670",
+    "Jodi": "33"
+  },
+  {
+    "market": "time_night",
+    "Date": "2026-09-26",
+    "Open Digit": "9",
+    "Close Digit": "2",
+    "Open Panna": "126",
+    "Close Panna": "345",
+    "Jodi": "92"
+  },
+  {
+    "market": "tulsi_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "4",
+    "Close Digit": "0",
+    "Open Panna": "347",
+    "Close Panna": "190",
+    "Jodi": "40"
+  },
+  {
+    "market": "worli_morning",
+    "Date": "2026-09-26",
+    "Open Digit": "1",
+    "Close Digit": "1",
+    "Open Panna": "290",
+    "Close Panna": "119",
+    "Jodi": "11"
+  },
+  {
+    "market": "worli_mumbai",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "5",
+    "Open Panna": "238",
+    "Close Panna": "140",
+    "Jodi": "35"
+  },
+  {
+    "market": "worli_mumbai_day",
+    "Date": "2026-09-26",
+    "Open Digit": "3",
+    "Close Digit": "8",
+    "Open Panna": "120",
+    "Close Panna": "440",
+    "Jodi": "38"
+  },
+  {
+    "market": "worli_mumbai_night",
+    "Date": "2026-09-26",
+    "Open Digit": "5",
+    "Close Digit": "1",
+    "Open Panna": "159",
+    "Close Panna": "344",
+    "Jodi": "51"
+  },
+  {
+    "market": "worli_night",
+    "Date": "2026-09-26",
+    "Open Digit": "0",
+    "Close Digit": "4",
+    "Open Panna": "226",
+    "Close Panna": "130",
+    "Jodi": "4"
+  }
+]
