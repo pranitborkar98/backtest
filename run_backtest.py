@@ -20,6 +20,7 @@ Notes:
 """
 
 import argparse
+import json
 import subprocess
 import sys
 import time
@@ -50,15 +51,60 @@ ENGINES = [
 ]
 
 
+def _history_dates() -> list[str]:
+    """Distinct dates present in all_markets_history.json, normalized to
+    YYYY-MM-DD, sorted ascending. Empty list if file missing."""
+    hist = HERE / "all_markets_history.json"
+    if not hist.exists():
+        return []
+    try:
+        data = json.loads(hist.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    seen = set()
+    for recs in data.values():
+        if isinstance(recs, dict):                     # {"records": [...]} shape
+            recs = recs.get("records") or recs.get("history") or []
+        if not isinstance(recs, list):
+            continue
+        for r in recs:
+            if not isinstance(r, dict):
+                continue
+            d = str(r.get("Date") or r.get("date") or "").strip()
+            if not d:
+                continue
+            parts = d.replace("/", "-").split("-")
+            if len(parts) == 3:
+                a, b, c = parts
+                if len(a) == 4:            # already YYYY-MM-DD
+                    iso = f"{a}-{int(b):02d}-{int(c):02d}"
+                elif len(c) == 4:          # DD/MM/YYYY or MM/DD/YYYY
+                    mth, dy = (b, a) if int(b) <= 12 else (a, b)
+                    iso = f"{c}-{int(mth):02d}-{int(dy):02d}"
+                else:
+                    continue
+                seen.add(iso)
+    return sorted(seen)
+
+
 def build_dates(start_s: str | None, end_s: str | None, days: int) -> list[str]:
+    hd = _history_dates()
     if start_s and end_s:
-        d0 = datetime.strptime(start_s, "%Y-%m-%d").date()
-        d1 = datetime.strptime(end_s, "%Y-%m-%d").date()
+        s = datetime.strptime(start_s, "%Y-%m-%d").date().isoformat()
+        e = datetime.strptime(end_s, "%Y-%m-%d").date().isoformat()
+        if hd:
+            return [d for d in hd if s <= d <= e]   # only real market days
+        d0, d1 = date.fromisoformat(s), date.fromisoformat(e)
         out, d = [], d0
         while d <= d1:
             out.append(d.isoformat())
             d += timedelta(days=1)
         return out
+    if hd:
+        # Only dates up to today (future-dated rows in history have no actuals yet)
+        cap = date.today().isoformat()
+        past = [d for d in hd if d <= cap] or hd
+        return past[-days:]                          # last N days WITH actual results
     today = date.today()
     return [(today - timedelta(days=i)).isoformat() for i in range(days, 0, -1)]
 
