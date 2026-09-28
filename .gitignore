@@ -27,3 +27,10 @@ Thumbs.db
 coverage/
 htmlcov/
 .coverage
+# Generated prediction/backtest data (do not commit)
+labtest/
+assets/*.json
+output/
+predictions_*.json
+todays_predictions.json
+analysis_detail.csv

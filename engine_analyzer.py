@@ -48,6 +48,16 @@ log = logging.getLogger("engine_analyzer")
 
 CATEGORIES = ["od", "cd", "op", "cp", "j"]
 CATEGORY_LABELS = {"od": "Open Digits", "cd": "Close Digits", "op": "Open Pannas", "cp": "Close Pannas", "j":  "Jodis"}
+
+# --- P&L simulation (₹10 flat stake on every pick, real payout multipliers) ---
+STAKE = 10.0                       # rupees staked per individual pick
+PAYOUT_MULTIPLIER = {              # net winnings per ₹1 (i.e. a hit returns multiplier+1 total)
+    "od": 9.0,   # single digit  1:9
+    "cd": 9.0,   # single digit  1:9
+    "j":  90.0,  # jodi          1:90
+    "op": 140.0, # open panna    1:140
+    "cp": 140.0, # close panna   1:140
+}
 CATEGORY_ALIASES = {
     "od": ("opendigit", "od", "opendigits", "open_digit", "open_digits"),
     "cd": ("closedigit", "cd", "closedigits", "close_digit", "close_digits"),
@@ -178,7 +188,11 @@ def extract_picks(item: Dict[str, Any], meta: Dict[str, Any]) -> Tuple[Optional[
     norm = {key(k): v for k, v in pred.items()}
     picks: Dict[str, List[str]] = {}
     for cat, label in CATEGORY_LABELS.items():
-        raw = norm.get(key(label))
+        raw = None
+        for alias in CATEGORY_ALIASES[cat]:          # opendigit, od, open_digits, ... (robust to singular/plural)
+            if norm.get(alias):
+                raw = norm[alias]
+                break
         if isinstance(raw, list) and len(raw) == 2 and isinstance(raw[0], list) and isinstance(raw[1], dict):
             raw = raw[0]
         if not isinstance(raw, list): raw = []
@@ -204,6 +218,23 @@ def score_one(picks: Dict[str, List[str]], actual: Dict[str, Optional[str]]) -> 
         else: out[cat] = "miss"
     return out
 
+def pl_one(picks: Dict[str, List[str]], actual: Dict[str, Optional[str]]) -> Dict[str, float]:
+    """Simulate ₹STAKE on every pick; hits pay STAKE*multiplier net, misses lose STAKE.
+    no_actual / no_picks contribute 0 (no bet placed)."""
+    out: Dict[str, float] = {}
+    for cat in CATEGORIES:
+        actual_val = actual.get(cat)
+        picks_list = picks.get(cat, [])
+        if not picks_list or actual_val is None or actual_val == "":
+            out[cat] = 0.0
+            continue
+        mult = PAYOUT_MULTIPLIER[cat]
+        pnl = 0.0
+        for p in picks_list:
+            pnl += STAKE * mult if p == actual_val else -STAKE
+        out[cat] = pnl
+    return out
+
 def score_records(records: List[Dict[str, Any]], history: Dict[str, Dict[str, Dict[str, Optional[str]]]]) -> List[Dict[str, Any]]:
     scored: List[Dict[str, Any]] = []
     for rec in records:
@@ -212,13 +243,15 @@ def score_records(records: List[Dict[str, Any]], history: Dict[str, Dict[str, Di
         for cat in CATEGORIES:
             merged_actual[cat] = hist_actual.get(cat)
         status = score_one(rec["picks"], merged_actual)
-        scored.append({**rec, "actual": merged_actual, "status": status})
+        scored.append({**rec, "actual": merged_actual, "status": status, "pl": pl_one(rec["picks"], merged_actual)})
     return scored
 
 def aggregate_scores(scored: List[Dict[str, Any]]) -> Dict[str, Any]:
     by_engine: Dict[str, Counter] = defaultdict(Counter)
     by_engine_cat: Dict[Tuple[str, str], Counter] = defaultdict(Counter)
     by_engine_market_cat: Dict[Tuple[str, str, str], Counter] = defaultdict(Counter)
+    pl_by_engine: Dict[str, float] = defaultdict(float)
+    pl_by_engine_cat: Dict[Tuple[str, str], float] = defaultdict(float)
 
     for rec in scored:
         eng, mkt = rec["engine"], rec["market"]
@@ -227,6 +260,9 @@ def aggregate_scores(scored: List[Dict[str, Any]]) -> Dict[str, Any]:
             by_engine[eng][st] += 1
             by_engine_cat[(eng, cat)][st] += 1
             by_engine_market_cat[(eng, mkt, cat)][st] += 1
+            amt = rec.get("pl", {}).get(cat, 0.0)
+            pl_by_engine[eng] += amt
+            pl_by_engine_cat[(eng, cat)] += amt
 
     def rates(c: Counter) -> Dict[str, Any]:
         hits, misses = c.get("hit", 0), c.get("miss", 0)
@@ -242,6 +278,8 @@ def aggregate_scores(scored: List[Dict[str, Any]]) -> Dict[str, Any]:
         "by_engine": {eng: rates(c) for eng, c in by_engine.items()},
         "by_engine_category": {f"{eng}|{cat}": rates(c) for (eng, cat), c in by_engine_cat.items()},
         "by_engine_market_category": {f"{eng}|{mkt}|{cat}": rates(c) for (eng, mkt, cat), c in by_engine_market_cat.items()},
+        "pl_by_engine": dict(pl_by_engine),
+        "pl_by_engine_category": {f"{eng}|{cat}": v for (eng, cat), v in pl_by_engine_cat.items()},
     }
 
 def print_console_report(agg: Dict[str, Any], target_date: Optional[str]) -> None:
@@ -249,7 +287,21 @@ def print_console_report(agg: Dict[str, Any], target_date: Optional[str]) -> Non
     if target_date: print(f"  ANALYSIS FOR DATE: {target_date}")
     else: print("  AGGREGATE ANALYSIS (all available history in D:\\backtest)")
     print("=" * 80)
-    
+
+    pl_eng = agg.get("pl_by_engine", {})
+    pl_cat = agg.get("pl_by_engine_category", {})
+
+    print(f"\nP&L LEADERBOARD (stake Rs.{STAKE:.0f}/pick; payouts OD/CD 1:9, Jodi 1:90, Panna 1:140)")
+    print("-" * 80)
+    print(f"{'Engine':<25}" + "".join(f"{CATEGORY_LABELS[c]:>13}" for c in CATEGORIES) + f"{'NET':>12}")
+    for eng in sorted(pl_eng, key=lambda e: pl_eng[e], reverse=True):
+        line = f"{eng:<25}"
+        for cat in CATEGORIES:
+            v = pl_cat.get(f"{eng}|{cat}")
+            line += f"{(f'{v:+,.0f}' if v is not None else 'n/a'):>13}"
+        line += f"{pl_eng[eng]:>+12,.0f}"
+        print(line)
+
     print("\nENGINE OVERVIEW (sorted by overall hit rate, scored only)")
     print("-" * 80)
     rows = []
@@ -293,13 +345,19 @@ def write_csv_report(path: Path, scored: List[Dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["engine", "market", "target_date", "category", "status", "actual", "picks", "source"])
+        w.writerow(["engine", "market", "target_date", "category", "status", "actual", "picks", "stake_rs", "net_pl_rs", "source"])
         for rec in scored:
             for cat in CATEGORIES:
+                picks_list = rec["picks"].get(cat, [])
+                st = rec["status"][cat]
+                wagered = rec.get("pl", {}).get(cat)
+                stake_total = len(picks_list) * STAKE if st in ("hit", "miss") else 0.0
                 w.writerow([
-                    rec["engine"], rec["market"], rec["target_date"], cat, rec["status"][cat],
+                    rec["engine"], rec["market"], rec["target_date"], cat, st,
                     rec["actual"].get(cat, "") or "",
-                    "|".join(rec["picks"].get(cat, [])),
+                    "|".join(picks_list),
+                    f"{stake_total:.0f}",
+                    f"{wagered:.2f}" if wagered is not None and st in ("hit", "miss") else "",
                     rec.get("source", ""),
                 ])
 
