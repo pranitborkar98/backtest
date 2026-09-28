@@ -453,3 +453,42 @@ def run_engine():
 
 if __name__ == "__main__":
     run_engine()
+# ==== BACKTEST LAB 1-LINER: unique dated output -> D:\backtest\predictions_<YYYY-MM-DD>_v14_plugplay.json ====
+try:
+    import sys as _bt_sys, re as _bt_re, json as _bt_json, os as _bt_os, datetime as _bt_dt
+    from pathlib import Path as _bt_Path
+    def _bt_write(out_obj, d=None):
+        # Resolve the prediction date: meta -> CLI flag -> passed date -> today.
+        _m = (out_obj or {}).get("meta") or {} if isinstance(out_obj, dict) else {}
+        ds = str(_m.get("prediction_date") or _m.get("run_date") or _m.get("date") or "")
+        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+            _argv = list(_bt_sys.argv)
+            for _i, _a in enumerate(_argv):
+                if _a.startswith("--test-date") or _a.startswith("--date"):
+                    _v = _a.split("=", 1)[1] if "=" in _a else (_argv[_i+1] if _i+1 < len(_argv) else "")
+                    if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(_v)):
+                        ds = _v; break
+        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+            ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
+        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().parent))
+        _bt_dir.mkdir(parents=True, exist_ok=True)
+        _p = _bt_dir / f"predictions_{ds}_v14_plugplay.json"
+        _t = _p.with_suffix(".json.tmp")
+        _t.write_text(_bt_json.dumps(out_obj, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+        _bt_os.replace(_t, _p)
+        print(f"[BACKTEST] wrote {_p}")
+    # NOTE: this engine is a pure walk-forward scorer; it makes NO forward picks.
+    # It emits its per-market hit-rate report as a dated JSON (picks empty => counted as No Picks).
+    _bt_obj = {
+        "engine": "v14_plugplay",
+        "meta": {"note": "walk-forward hit-rate report only; no forward picks"},
+        "markets": [{"market": _r["market"],
+                     "combined_hit_rate": _r["rate"], "open_digit_hit_rate": _r["od"],
+                     "close_digit_hit_rate": _r["cd"], "picks": []}
+                    for _r in market_results],
+    }
+    _bt_write(_bt_obj)
+except Exception as _bt_e:
+    print(f"[BACKTEST] skipped: {_bt_e}")
+# ==== END BACKTEST LAB 1-LINER ====
+
