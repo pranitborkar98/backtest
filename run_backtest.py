@@ -109,7 +109,26 @@ def build_dates(start_s: str | None, end_s: str | None, days: int) -> list[str]:
     return [(today - timedelta(days=i)).isoformat() for i in range(days, 0, -1)]
 
 
-def run_one(engine: str, dt: str, dry: bool) -> tuple[str, str, float, str]:
+ENGINE_LABELS = {
+    "v10.py": "v10", "v20.py": "v20", "v30.py": "v30",
+    "v31.py": "v31", "prediction_engine_v31.py": "v31",
+    "prediction_engine_v32.py": "v32", "prediction_engine_v33.py": "v33",
+    "prediction_engine_ml_panna_first.py": "ml_panna_first",
+    "AbsoluteEngine.py": "absolute",
+    "prediction_engine_v50_unified.py": "v50_unified",
+    "prediction_engine_v51_unified.py": "v51_unified",
+    "prediction_engine_v52_adaptive.py": "v52_adaptive",
+    "prediction_engine_v53_unified.py": "v53_unified",
+    "prediction_engine_v4.py": "v4",
+    "matka_engine_v14_3.py": "v14_3",
+}
+
+
+def run_one(engine: str, dt: str, dry: bool, skip_existing: bool = False) -> tuple[str, str, float, str]:
+    if skip_existing and not dry:
+        label = ENGINE_LABELS.get(engine, engine.replace(".py", ""))
+        if (TARGET_DIR / f"predictions_{dt}_{label}.json").exists():
+            return engine, dt, 0.0, "SKIP (file exists)"
     cmd = [sys.executable, str(HERE / engine), "--date", dt]
     if dry:
         return engine, dt, 0.0, "DRY " + " ".join(cmd)
@@ -130,6 +149,8 @@ def run_one(engine: str, dt: str, dry: bool) -> tuple[str, str, float, str]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--days", type=int, default=30, help="Lookback window (default 30)")
+    ap.add_argument("--full", action="store_true", help="EVERY date in all_markets_history.json (~8 years)")
+    ap.add_argument("--skip-existing", action="store_true", help="Skip engines whose dated prediction file already exists")
     ap.add_argument("--start", type=str, default=None, help="Explicit start date YYYY-MM-DD")
     ap.add_argument("--end", type=str, default=None, help="Explicit end date YYYY-MM-DD")
     ap.add_argument("--engines", nargs="*", default=None, help="Subset of engine filenames")
@@ -143,7 +164,17 @@ def main() -> int:
         print("ERROR: engine scripts not found in", HERE, "->", ", ".join(missing))
         return 2
 
-    dates = build_dates(args.start, args.end, args.days)
+    if args.full:
+        hd = _history_dates()
+        if not hd:
+            print("ERROR: --full requested but no dates found in all_markets_history.json")
+            return 2
+        dates = hd                                   # EVERY date in history (2018-2025)
+    else:
+        dates = build_dates(args.start, args.end, args.days)
+    if not dates:
+        print("ERROR: no dates to run for the requested range")
+        return 2
     total = len(dates) * len(engines)
     print(f"Backtest plan: {len(dates)} dates x {len(engines)} engines = {total} runs")
     print(f"Output folder: {TARGET_DIR}")
@@ -157,9 +188,9 @@ def main() -> int:
         print(f"\n[{i}/{len(dates)}] {dt}")
         if args.workers > 1:
             with ThreadPoolExecutor(max_workers=args.workers) as ex:
-                results = list(ex.map(lambda e: run_one(e, dt, args.dry_run), engines))
+                results = list(ex.map(lambda e: run_one(e, dt, args.dry_run, args.skip_existing), engines))
         else:
-            results = [run_one(e, dt, args.dry_run) for e in engines]
+            results = [run_one(e, dt, args.dry_run, args.skip_existing) for e in engines]
         for eng, _dt, el, status in results:
             done += 1
             if status.startswith("FAIL"):
