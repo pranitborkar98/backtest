@@ -26,7 +26,8 @@ Thumbs.db
 # Other common ignores
 coverage/
 htmlcov/
-.coverage# Generated prediction/backtest data (do not commit)
+.coverage
+# Generated prediction/backtest data (do not commit)
 labtest/
 assets/*.json
 output/
