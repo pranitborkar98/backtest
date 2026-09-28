@@ -87,6 +87,30 @@ VALID_PANNAS_BY_LAST_DIGIT = {
  9:["199","289","379","388","469","478","559","568","577","667","999","666","117","126","135","144","180","225","234","270","360","450","900","333"]
 }
 
+# ---- BACKTEST LAB path portability: on machines without the C:\Users\VCOM tree
+# (e.g. running inside D:\backtest), remap config paths to this script's folder.
+try:
+    import os as _p_os
+    if CONFIG.get("LAB_MODE") or (not _p_os.path.exists(_p_os.path.dirname(CONFIG["HISTORY_FILE"]))):
+        _P_HERE = _p_os.path.dirname(_p_os.path.abspath(__file__))
+        _P_MAP = {
+            "HISTORY_FILE": "all_markets_history.json",
+            "YDAY_RESULTS_FILE": "yesterday_results.json",
+            "OUTPUT_DIR": "output",
+            "STATE_FILE": "state/engine_v20_state.json",
+            "TODAY_TEST_FILE": "output/todays_predictions_TEST.json",
+            "TODAY_PROD_FILE": "output/todays_predictions.json",
+            "TODAYS_PREDICTIONS_JSON": "output/todays_predictions.json",
+            "DNA_FILE": "output/market_dna.json",
+            "LOG_FILE": "output/engine.log",
+            "ASSETS_DIR": "assets",
+        }
+        for _pk, _pf in _P_MAP.items():
+            if _pk in CONFIG and isinstance(CONFIG[_pk], str):
+                CONFIG[_pk] = _p_os.path.join(_P_HERE, _pf)
+except Exception:
+    pass
+
 # =========================
 # ========= LOGGING =======
 # =========================
@@ -502,6 +526,61 @@ def run_once(for_date=None, force_prod=False, dry_run=False):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="SattaMatkaAI Prediction Engine v10 (Kalyan Human-Bias).")
     ap.add_argument("--prod", action="store_true", help="Force PROD mode")
+    ap.add_argument("--date", type=str, default=None, help="Override run date YYYY-MM-DD (backtesting).")
     ap.add_argument("--dry-run", action="store_true", help="Compute but do not write JSON")
     args = ap.parse_args()
-    run_once(force_prod=args.prod, dry_run=args.dry_run)
+    run_date = datetime.datetime.strptime(args.date, "%Y-%m-%d").date() if getattr(args, "date", None) else None
+    run_once(for_date=run_date, force_prod=args.prod, dry_run=args.dry_run)
+
+# ==== BACKTEST LAB 1-LINER: unique dated output -> D:\backtest\predictions_<YYYY-MM-DD>_v20.json ====
+try:
+    import sys as _bt_sys, re as _bt_re, json as _bt_json, os as _bt_os, datetime as _bt_dt
+    from pathlib import Path as _bt_Path
+    def _bt_write(out_obj, d=None):
+        # Resolve the prediction date: engine meta -> per-market "Date" -> CLI flag -> passed date -> today.
+        _m = (out_obj or {}).get("meta") or {} if isinstance(out_obj, dict) else {}
+        ds = str(_m.get("prediction_date") or _m.get("run_date") or _m.get("date") or _m.get("target_date") or "")
+        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds) and isinstance(out_obj, dict):
+            _mlist = out_obj.get("markets") or []
+            if isinstance(_mlist, dict):
+                _cand = str(_mlist.get("Date") or "")
+                if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
+                    ds = _cand
+            elif isinstance(_mlist, list):
+                for _mk in _mlist:
+                    _cand = str((_mk.get("predictions") or {}).get("Date") if isinstance(_mk, dict) else "")
+                    if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
+                        ds = _cand; break
+        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+            _argv = list(_bt_sys.argv)
+            for _i, _a in enumerate(_argv):
+                if _a.startswith("--test-date") or _a.startswith("--date"):
+                    _v = _a.split("=", 1)[1] if "=" in _a else (_argv[_i+1] if _i+1 < len(_argv) else "")
+                    if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(_v)):
+                        ds = _v; break
+        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+            ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
+        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().as_posix()))
+        _bt_dir.mkdir(parents=True, exist_ok=True)
+        _p = _bt_dir / f"predictions_{ds}_v20.json"
+        _t = _p.with_suffix(".json.tmp")
+        _t.write_text(_bt_json.dumps(out_obj, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+        _bt_os.replace(_t, _p)
+        print(f"[BACKTEST] wrote {_p}")
+    _bt_obj = None
+    for _bt_k in ('app_json', 'output', 'result', 'payload', 'data'):
+        _bt_v = globals().get(_bt_k)
+        if isinstance(_bt_v, (dict, list)) and _bt_v:
+            _bt_obj = _bt_v; break
+    if _bt_obj is None and 'run_once' in dir():
+        try:
+            _bt_r = run_once()
+            if isinstance(_bt_r, (dict, list)) and _bt_r:
+                _bt_obj = _bt_r
+        except Exception as _bt_r_e:
+            print(f"[BACKTEST] skipped: engine run failed -> {_bt_r_e}")
+    if _bt_obj is not None:
+        _bt_write(_bt_obj)
+except Exception as _bt_e:
+    print(f"[BACKTEST] skipped: {_bt_e}")
+# ==== END BACKTEST LAB 1-LINER ====
