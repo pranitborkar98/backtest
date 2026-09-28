@@ -1,4 +1,4 @@
-"""
+r"""
 engine_analyzer.py — Internal Multi-Engine Prediction Analyzer
 - Reads 10+ engine predictions from D:\backtest
 - Reads actual results from C:\Users\VCOM\AndroidStudioProjects\multi_market_predictions_v3\assets\
@@ -21,8 +21,26 @@ from typing import Dict, List, Any, Optional, Tuple, Iterable, Set
 from itertools import combinations_with_replacement
 
 # Hardcoded paths based on your architecture
-TARGET_DIR = Path(r"D:\backtest")
-HISTORY_FILE_DEFAULT = Path(r"C:\Users\VCOM\Desktop\Kalyan_Penal_Scraper\sattaboss-data\data\all_markets_history.json")
+def _lab_default_dir() -> Path:
+    # D:\backtest on the lab PC; otherwise fall back to this script's folder.
+    d = Path(r"D:\backtest")
+    try:
+        d.mkdir(parents=True, exist_ok=True); return d
+    except Exception:
+        return Path(__file__).resolve().parent
+
+TARGET_DIR = Path(os.environ.get("LAB_DIR")) if os.environ.get("LAB_DIR") else _lab_default_dir()
+
+def _default_history() -> Path:
+    cand = [Path(r"C:\Users\VCOM\Desktop\Kalyan_Penal_Scraper\sattaboss-data\data\all_markets_history.json"),
+            TARGET_DIR / "all_markets_history.json",
+            Path(__file__).resolve().parent / "all_markets_history.json"]
+    for c in cand:
+        if c.exists():
+            return c
+    return cand[0]
+
+HISTORY_FILE_DEFAULT = _default_history()
 YESTERDAY_RESULTS_FILE = Path(r"C:\Users\VCOM\AndroidStudioProjects\multi_market_predictions_v3\assets\yesterday_results.json")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s", handlers=[logging.StreamHandler()])
