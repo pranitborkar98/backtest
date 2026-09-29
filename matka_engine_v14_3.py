@@ -566,7 +566,7 @@ try:
                         ds = _v; break
         if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
             ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
-        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().as_posix()))
+        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if False else _bt_Path(__file__).resolve().parent))
         _bt_dir.mkdir(parents=True, exist_ok=True)
         _p = _bt_dir / f"predictions_{ds}_v14_3.json"
         _t = _p.with_suffix(".json.tmp")

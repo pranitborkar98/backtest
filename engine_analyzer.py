@@ -23,7 +23,7 @@ from itertools import combinations_with_replacement
 # Hardcoded paths based on your architecture
 def _lab_default_dir() -> Path:
     # D:\backtest on the lab PC; otherwise fall back to this script's folder.
-    d = Path(r"D:\backtest")
+    d = Path(__file__).resolve().parent
     try:
         d.mkdir(parents=True, exist_ok=True); return d
     except Exception:

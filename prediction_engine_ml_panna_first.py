@@ -66,6 +66,12 @@ def _resolve_path(key: str, cli_value: Optional[str]) -> Path:
     if env_val:
         return Path(env_val)
     default = Path(_DEFAULTS[key])
+    # Backtest lab: a history file shipped next to this script always wins.
+    if key == "HISTORY_FILE":
+        for _h in (Path(__file__).resolve().parent / "all_markets_history.json",
+                   _LOCAL_FALLBACK_DIR / default.name):
+            if _h.exists() and _h.stat().st_size > 0:
+                return _h
     if default.parent.exists():
         return default
     return _LOCAL_FALLBACK_DIR / default.name
@@ -907,7 +913,7 @@ try:
                         ds = _v; break
         if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
             ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
-        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().as_posix()))
+        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if False else _bt_Path(__file__).resolve().parent))
         _bt_dir.mkdir(parents=True, exist_ok=True)
         _p = _bt_dir / f"predictions_{ds}_ml_panna_first.json"
         _t = _p.with_suffix(".json.tmp")
