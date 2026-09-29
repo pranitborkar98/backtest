@@ -1,2 +1,31 @@
-# Logs and temp files
+# Python Cache and Build Artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Virtual Environments
+.venv/
+venv/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Logs and Temp Files
 *.log
+*.tmp
+
+# Project Specific Output/Cache
+output/

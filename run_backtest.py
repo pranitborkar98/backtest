@@ -162,6 +162,11 @@ def _engine_env(engine: str) -> dict:
         env["SATTA_OUTPUT_DIR"] = str(eng_dir)
         env["SATTA_STATE_FILE"] = str(eng_dir / f"{stem}_state.json")
         env["SATTA_LOG_FILE"] = str(eng_dir / f"{stem}.log")
+        # Cap gradient-boosting iterations so the first cold run (no joblib
+        # cache yet) trains each market ranker in seconds instead of minutes.
+        # Cached models are keyed by data hash only, so delete _bt_* dirs after
+        # changing this value if you want models retrained with the new cap.
+        env.setdefault("SATTA_ML_MAX_ITER", "25")
     return env
 
 

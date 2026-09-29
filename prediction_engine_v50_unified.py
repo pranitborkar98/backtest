@@ -40,7 +40,14 @@ def _resolve_path(key: str, cli_value: Optional[str]) -> Path:
     env_val = os.environ.get(_ENV_PREFIX + key)
     if env_val: return Path(env_val)
     default = Path(_DEFAULTS[key])
-    if default.parent.exists(): return default
+    # On POSIX (Linux/macOS) a Windows path like C:\... is ONE giant filename,
+    # so default.parent.exists() can be True while the file itself never exists.
+    # Only trust the production default when it is actually usable.
+    if default.parent.exists() and (key != "HISTORY_FILE" or default.exists()):
+        return default
+    if key == "HISTORY_FILE":
+        local = Path(__file__).resolve().parent / "all_markets_history.json"
+        if local.exists(): return local
     return _LOCAL_FALLBACK_DIR / default.name
 
 CONFIG = {
@@ -1042,7 +1049,12 @@ def build_jodis_ml(open_digits: List[str], close_digits: List[str], ctx: Dict[st
         if len(out)>=CONFIG["NUM_JODIS"]: break
     return out
 
-def predict_market_ml(mkt: str, rows: List[Dict[str,Any]], asof: datetime.date, cache_dir: Path, clear_cache: bool, max_iter: int=100)->Optional[Dict[str,Any]]:
+def predict_market_ml(mkt: str, rows: List[Dict[str,Any]], asof: datetime.date, cache_dir: Path, clear_cache: bool, max_iter: Optional[int]=None)->Optional[Dict[str,Any]]:
+    # Backtest lab: honor SATTA_ML_MAX_ITER (set by run_backtest.py) so a fresh
+    # ranker train per market cannot blow past the harness timeout.
+    if max_iter is None:
+        try: max_iter=int(os.environ.get("SATTA_ML_MAX_ITER") or CONFIG["BACKTEST_ML_MAX_ITER"])
+        except (ValueError, KeyError): max_iter=CONFIG["BACKTEST_ML_MAX_ITER"]
     if len(rows)<CONFIG["MIN_HISTORY_FOR_ML"]:
         return None
     ctx=PannaFeatureBuilder.build_context(rows,asof)
@@ -1427,6 +1439,16 @@ def main():
     if _asof is not None and _asof < datetime.date.today() and not args.skip_first_backtest:
         args.skip_first_backtest = True
         logger.info("Backtest mode: auto-skipping first-run walk-forward backtest for past date.")
+    # Backtest lab speed cap: the ranker trains from scratch on ~180 features x
+    # 15x negative sampling per market; without a cap it blows past any sane
+    # harness timeout. SATTA_ML_MAX_ITER (set by run_backtest.py) bounds it.
+    try:
+        _ml_cap = int(os.environ.get("SATTA_ML_MAX_ITER", "0"))
+        if _ml_cap > 0:
+            CONFIG["BACKTEST_ML_MAX_ITER"] = _ml_cap
+            CONFIG.setdefault("ML_MAX_ITER", _ml_cap)
+    except ValueError:
+        pass
     output=run_once(args,all_hist,state,output_dir)
     if args.prod: out_path=Path(_DEFAULTS["TODAY_PROD_FILE"])
     elif args.test: out_path=Path(_DEFAULTS["TODAY_TEST_FILE"])
