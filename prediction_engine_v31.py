@@ -94,10 +94,14 @@ def _resolve_path(key: str, cli_value: Optional[str]) -> Path:
     if env_val:
         return Path(env_val)
     default = Path(_DEFAULTS[key])
-    # If the default's parent exists (we're actually on the VCOM machine), use it.
+    # Backtest lab: a history file shipped next to this script always wins.
+    if key == "HISTORY_FILE":
+        for _h in (Path(__file__).resolve().parent / "all_markets_history.json",
+                   _LOCAL_FALLBACK_DIR / default.name):
+            if _h.exists() and _h.stat().st_size > 0:
+                return _h
     if default.parent.exists():
         return default
-    # Otherwise fall back to a local, portable location so the engine still runs.
     return _LOCAL_FALLBACK_DIR / default.name
 
 
@@ -1041,57 +1045,65 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
-
-# ==== BACKTEST LAB 1-LINER: unique dated output -> D:\backtest\predictions_<YYYY-MM-DD>_v31.json ====
-try:
-    import sys as _bt_sys, re as _bt_re, json as _bt_json, os as _bt_os, datetime as _bt_dt
-    from pathlib import Path as _bt_Path
-    def _bt_write(out_obj, d=None):
-        # Resolve the prediction date: engine meta -> per-market "Date" -> CLI flag -> passed date -> today.
-        _m = (out_obj or {}).get("meta") or {} if isinstance(out_obj, dict) else {}
-        ds = str(_m.get("prediction_date") or _m.get("run_date") or _m.get("date") or _m.get("target_date") or "")
-        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds) and isinstance(out_obj, dict):
-            _mlist = out_obj.get("markets") or []
-            if isinstance(_mlist, dict):
-                _cand = str(_mlist.get("Date") or "")
-                if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
-                    ds = _cand
-            elif isinstance(_mlist, list):
-                for _mk in _mlist:
-                    _cand = str((_mk.get("predictions") or {}).get("Date") if isinstance(_mk, dict) else "")
+    # ==== BACKTEST LAB 1-LINER: unique dated output -> D:\backtest\predictions_<YYYY-MM-DD>_v31.json ====
+    try:
+        import sys as _bt_sys, re as _bt_re, json as _bt_json, os as _bt_os, datetime as _bt_dt
+        from pathlib import Path as _bt_Path
+        def _bt_write(out_obj, d=None):
+            # Resolve the prediction date: engine meta -> per-market "Date" -> CLI flag -> passed date -> today.
+            _m = (out_obj or {}).get("meta") or {} if isinstance(out_obj, dict) else {}
+            ds = str(_m.get("prediction_date") or _m.get("run_date") or _m.get("date") or _m.get("target_date") or "")
+            if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds) and isinstance(out_obj, dict):
+                _mlist = out_obj.get("markets") or []
+                if isinstance(_mlist, dict):
+                    _cand = str(_mlist.get("Date") or "")
                     if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
-                        ds = _cand; break
-        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
-            _argv = list(_bt_sys.argv)
-            for _i, _a in enumerate(_argv):
-                if _a.startswith("--test-date") or _a.startswith("--date"):
-                    _v = _a.split("=", 1)[1] if "=" in _a else (_argv[_i+1] if _i+1 < len(_argv) else "")
-                    if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(_v)):
-                        ds = _v; break
-        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
-            ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
-        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().as_posix()))
-        _bt_dir.mkdir(parents=True, exist_ok=True)
-        _p = _bt_dir / f"predictions_{ds}_v31.json"
-        _t = _p.with_suffix(".json.tmp")
-        _t.write_text(_bt_json.dumps(out_obj, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
-        _bt_os.replace(_t, _p)
-        print(f"[BACKTEST] wrote {_p}")
-    _bt_obj = None
-    for _bt_k in ('app_json', 'output', 'result', 'payload', 'data'):
-        _bt_v = globals().get(_bt_k)
-        if isinstance(_bt_v, (dict, list)) and _bt_v:
-            _bt_obj = _bt_v; break
-    if _bt_obj is None and 'run_once' in dir():
+                        ds = _cand
+                elif isinstance(_mlist, list):
+                    for _mk in _mlist:
+                        _cand = str((_mk.get("predictions") or {}).get("Date") if isinstance(_mk, dict) else "")
+                        if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
+                            ds = _cand; break
+            if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+                _argv = list(_bt_sys.argv)
+                for _i, _a in enumerate(_argv):
+                    if _a.startswith("--test-date") or _a.startswith("--date"):
+                        _v = _a.split("=", 1)[1] if "=" in _a else (_argv[_i+1] if _i+1 < len(_argv) else "")
+                        if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(_v)):
+                            ds = _v; break
+            if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+                ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
+            _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if False else _bt_Path(__file__).resolve().parent))
+            _bt_dir.mkdir(parents=True, exist_ok=True)
+            _p = _bt_dir / f"predictions_{ds}_v31.json"
+            _t = _p.with_suffix(".json.tmp")
+            _t.write_text(_bt_json.dumps(out_obj, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+            _bt_os.replace(_t, _p)
+            print(f"[BACKTEST] wrote {_p}")
+        _bt_holder = {}
+        _bt_orig_run_once = run_once
+        def _bt_run_once_wrapper(*a, **kw):
+            _r = _bt_orig_run_once(*a, **kw)
+            if isinstance(_r, (dict, list)) and _r:
+                _bt_holder["r"] = _r
+            return _r
+        globals()["run_once"] = _bt_run_once_wrapper
         try:
-            _bt_r = run_once()
-            if isinstance(_bt_r, (dict, list)) and _bt_r:
-                _bt_obj = _bt_r
-        except Exception as _bt_r_e:
-            print(f"[BACKTEST] skipped: engine run failed -> {_bt_r_e}")
-    if _bt_obj is not None:
-        _bt_write(_bt_obj)
-except Exception as _bt_e:
-    print(f"[BACKTEST] skipped: {_bt_e}")
-# ==== END BACKTEST LAB 1-LINER ====
+            sys.exit(main())
+        finally:
+            _bt_obj = _bt_holder.get("r")
+            if _bt_obj is None:
+                for _bt_k in ('app_json', 'output', 'result', 'payload', 'data'):
+                    _bt_v = globals().get(_bt_k)
+                    if isinstance(_bt_v, (dict, list)) and _bt_v:
+                        _bt_obj = _bt_v; break
+            if _bt_obj is not None:
+                try:
+                    _bt_write(_bt_obj)
+                except Exception as _bt_e:
+                    print(f"[BACKTEST] write failed: {_bt_e}")
+    except Exception as _bt_e:
+        print(f"[BACKTEST] skipped: {_bt_e}")
+    # ==== END BACKTEST LAB 1-LINER ====
+
+

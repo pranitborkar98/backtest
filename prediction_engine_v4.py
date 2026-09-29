@@ -34,7 +34,9 @@ KALYAN_FOLDER = os.path.join(ROOT, "kalyan")
 SATTABOSS_DATA = os.path.join(ROOT, "sattaboss-data", "data")
 KALYAN_ASSETS = os.path.join(KALYAN_FOLDER, "assets")
 
-FLUTTER_PROJECT_ASSETS = r"C:\Users\VCOM\AndroidStudioProjects\multi_market_predictions_v3\assets"
+_BT_HERE = os.path.dirname(os.path.abspath(__file__))
+# Backtest lab: keep ALL outputs inside this script's folder (never the Android project).
+FLUTTER_PROJECT_ASSETS = os.environ.get("LAB_DIR") or _BT_HERE
 
 # Input history candidates (priority)
 HISTORY_CANDIDATES = [
@@ -574,7 +576,7 @@ try:
                         ds = _v; break
         if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
             ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
-        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().as_posix()))
+        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if False else _bt_Path(__file__).resolve().parent))
         _bt_dir.mkdir(parents=True, exist_ok=True)
         _p = _bt_dir / f"predictions_{ds}_v4.json"
         _t = _p.with_suffix(".json.tmp")

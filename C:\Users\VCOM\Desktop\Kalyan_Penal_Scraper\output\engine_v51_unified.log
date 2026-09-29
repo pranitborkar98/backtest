@@ -1,0 +1,97 @@
+2026-09-29 13:07:21,517 INFO Starting v51_unified | history=/workspace/all_markets_history.json | state=C:\Users\VCOM\Desktop\Kalyan_Penal_Scraper\state\engine_v51_unified_state.json
+2026-09-29 13:07:21,897 INFO Backtest mode: auto-skipping first-run walk-forward backtest for past date.
+2026-09-29 13:07:25,131 INFO Incremental backtest scored: {'andhra_day': 1, 'andhra_morning': 1, 'andhra_night': 1, 'apla_bazar_day': 0, 'apla_bazar_night': 0, 'asha_bazar': 0, 'bombay_day': 1, 'bombay_night': 1, 'bombay_rajshree_day': 1, 'bombay_rajshree_night': 1, 'cb': 0, 'central_bombay': 1, 'central_mumbai': 1, 'chandni_morning': 0, 'country_bazar': 1, 'day_bombay': 1, 'delhi_bazar': 1, 'diamond': 1, 'diamond_night': 1, 'durga_night': 0, 'geeta_morning': 1, 'gowa': 1, 'gujrat_morning': 0, 'gujrat_night': 0, 'janta_day': 0, 'janta_morning': 1, 'jay_shree_day': 1, 'kaali': 1, 'kalyan': 1, 'kalyan_express': 1, 'kalyan_morning': 1, 'kalyan_night': 1, 'kalyan_sai_day': 0, 'kalyan_sridevi': 1, 'kalyan_sridevi_night': 1, 'kamal_day': 1, 'kamal_morning': 1, 'kamal_night': 1, 'karnataka_day': 1, 'khatri_morning': 0, 'laxmi_day': 1, 'laxmi_night': 1, 'lokseva_day': 1, 'madhur_day': 1, 'madhur_morning': 1, 'madhur_night': 1, 'madhuri': 1, 'madhuri_night': 1, 'mahadevi': 1, 'mahadevi_morning': 1, 'mahadevi_night': 1, 'maharani': 1, 'maharani_day': 1, 'maharani_night': 1, 'main_bazar': 1, 'main_bazar_day': 0, 'main_bazar_morning': 1, 'main_mumbai_night': 0, 'main_mumbai_rk': 0, 'mangal_bazar': 0, 'mangal_day': 0, 'mangal_morning': 0, 'mangal_night': 0, 'maya_bazar': 1, 'meena_bazar': 1, 'meena_bazar_day': 0, 'meena_bazar_night': 0, 'meena_morning': 1, 'milan_bazar_day': 1, 'milan_bazar_morning': 1, 'milan_bazar_night': 1, 'milan_day': 1, 'milan_morning': 1, 'milan_night': 1, 'mohini': 1, 'mumbai_bazar': 1, 'mumbai_morning': 1, 'new_time_bazar': 0, 'night_bombay': 1, 'ntr_day': 1, 'ntr_morning': 1, 'ntr_night': 1, 'old_main_mumbai': 1, 'padmavathi': 1, 'padmavathi_night': 1, 'parel_day': 0, 'parvati': 0, 'prabhat': 1, 'prabhat_night': 0, 'puna_bazar': 1, 'puna_night_main': 0, 'rajdhani_day': 1, 'rajdhani_morning_main': 1, 'rajdhani_night': 1, 'rakhi_morning': 1, 'ratan_khatri': 0, 'ratna_day': 1, 'ratna_morning': 1, 'ratna_night': 1, 'rose_bazar_day': 1, 'rose_bazar_night': 1, 'sahara': 0, 'samrat_bazar': 1, 'shri_day': 1, 'shri_night': 1, 'sita_day': 1, 'sita_morning': 1, 'sita_night': 1, 'sitara_bazar': 0, 'sri_dhanalaxmi': 1, 'sridevi': 1, 'sridevi_day': 1, 'sridevi_morning': 1, 'sridevi_night': 1, 'srilakshmi': 1, 'srilaxmi_day': 1, 'star_tara_day': 1, 'star_tara_morning': 1, 'star_tara_night': 1, 'sunday_bazar': 1, 'super_day': 0, 'super_goa_day': 0, 'super_king': 1, 'super_king_night': 1, 'super_milan_day': 1, 'super_milan_night': 0, 'super_morning': 0, 'super_night': 0, 'super_time': 1, 'supreme_day': 1, 'supreme_night': 1, 'tara_mumbai_day': 1, 'tara_mumbai_night': 1, 'teen_patti': 1, 'time_bazar': 1, 'time_bazar_day': 1, 'time_bazar_morning': 1, 'time_night': 0, 'tulsi_morning': 1, 'worli_morning': 0, 'worli_mumbai': 1, 'worli_mumbai_day': 1, 'worli_mumbai_night': 1, 'worli_night': 0}
+2026-09-29 13:07:26,950 INFO Trained on 44608 samples (2788 positives).
+2026-09-29 13:07:26,957 WARNING Cache save failed for andhra_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:28,665 INFO Trained on 44672 samples (2792 positives).
+2026-09-29 13:07:28,671 WARNING Cache save failed for andhra_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:30,486 INFO Trained on 44496 samples (2781 positives).
+2026-09-29 13:07:30,493 WARNING Cache save failed for andhra_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:31,365 INFO Trained on 18944 samples (1184 positives).
+2026-09-29 13:07:31,367 WARNING Cache save failed for apla_bazar_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:32,265 INFO Trained on 18720 samples (1170 positives).
+2026-09-29 13:07:32,268 WARNING Cache save failed for apla_bazar_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:33,294 INFO Trained on 26240 samples (1640 positives).
+2026-09-29 13:07:33,349 WARNING Cache save failed for asha_bazar: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:34,693 INFO Trained on 31296 samples (1956 positives).
+2026-09-29 13:07:34,698 WARNING Cache save failed for bombay_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:36,283 INFO Trained on 43136 samples (2696 positives).
+2026-09-29 13:07:36,289 WARNING Cache save failed for bombay_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:39,148 INFO Trained on 77248 samples (4828 positives).
+2026-09-29 13:07:39,159 WARNING Cache save failed for bombay_rajshree_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:41,558 INFO Trained on 65312 samples (4082 positives).
+2026-09-29 13:07:41,566 WARNING Cache save failed for bombay_rajshree_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:42,791 INFO Trained on 31280 samples (1955 positives).
+2026-09-29 13:07:42,795 WARNING Cache save failed for cb: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:45,288 INFO Trained on 62656 samples (3916 positives).
+2026-09-29 13:07:45,296 WARNING Cache save failed for central_bombay: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:46,566 INFO Trained on 31568 samples (1973 positives).
+2026-09-29 13:07:46,570 WARNING Cache save failed for central_mumbai: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:47,559 INFO Trained on 25904 samples (1619 positives).
+2026-09-29 13:07:47,562 WARNING Cache save failed for chandni_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:50,192 INFO Trained on 70512 samples (4407 positives).
+2026-09-29 13:07:50,251 WARNING Cache save failed for country_bazar: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:51,469 INFO Trained on 28672 samples (1792 positives).
+2026-09-29 13:07:51,472 WARNING Cache save failed for day_bombay: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:53,078 INFO Trained on 37664 samples (2354 positives).
+2026-09-29 13:07:53,082 WARNING Cache save failed for delhi_bazar: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:54,455 INFO Trained on 31536 samples (1971 positives).
+2026-09-29 13:07:54,459 WARNING Cache save failed for diamond: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:55,491 INFO Trained on 26000 samples (1625 positives).
+2026-09-29 13:07:55,494 WARNING Cache save failed for diamond_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:56,686 INFO Trained on 27344 samples (1709 positives).
+2026-09-29 13:07:56,690 WARNING Cache save failed for durga_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:07:58,185 INFO Trained on 42912 samples (2682 positives).
+2026-09-29 13:07:58,191 WARNING Cache save failed for geeta_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:00,194 INFO Trained on 52656 samples (3291 positives).
+2026-09-29 13:08:00,253 WARNING Cache save failed for gowa: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:01,470 INFO Trained on 29936 samples (1871 positives).
+2026-09-29 13:08:01,473 WARNING Cache save failed for gujrat_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:02,556 INFO Trained on 25392 samples (1587 positives).
+2026-09-29 13:08:02,559 WARNING Cache save failed for gujrat_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:03,679 INFO Trained on 25792 samples (1612 positives).
+2026-09-29 13:08:03,682 WARNING Cache save failed for janta_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:05,993 INFO Trained on 65552 samples (4097 positives).
+2026-09-29 13:08:06,049 WARNING Cache save failed for janta_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:08,083 INFO Trained on 53168 samples (3323 positives).
+2026-09-29 13:08:08,090 WARNING Cache save failed for jay_shree_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:09,855 INFO Trained on 43456 samples (2716 positives).
+2026-09-29 13:08:09,860 WARNING Cache save failed for kaali: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:11,269 INFO Trained on 38224 samples (2389 positives).
+2026-09-29 13:08:11,273 WARNING Cache save failed for kalyan: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:12,358 INFO Trained on 26864 samples (1679 positives).
+2026-09-29 13:08:12,362 WARNING Cache save failed for kalyan_express: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:14,367 INFO Trained on 43392 samples (2712 positives).
+2026-09-29 13:08:14,372 WARNING Cache save failed for kalyan_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:16,175 INFO Trained on 51632 samples (3227 positives).
+2026-09-29 13:08:16,180 WARNING Cache save failed for kalyan_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:17,076 INFO Trained on 16656 samples (1041 positives).
+2026-09-29 13:08:17,078 WARNING Cache save failed for kalyan_sai_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:18,689 INFO Trained on 38192 samples (2387 positives).
+2026-09-29 13:08:18,693 WARNING Cache save failed for kalyan_sridevi: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:20,254 INFO Trained on 38336 samples (2396 positives).
+2026-09-29 13:08:20,259 WARNING Cache save failed for kalyan_sridevi_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:22,053 INFO Trained on 45088 samples (2818 positives).
+2026-09-29 13:08:22,058 WARNING Cache save failed for kamal_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:23,660 INFO Trained on 44816 samples (2801 positives).
+2026-09-29 13:08:23,666 WARNING Cache save failed for kamal_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:25,552 INFO Trained on 44848 samples (2803 positives).
+2026-09-29 13:08:25,557 WARNING Cache save failed for kamal_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:28,159 INFO Trained on 67952 samples (4247 positives).
+2026-09-29 13:08:28,167 WARNING Cache save failed for karnataka_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:29,191 INFO Trained on 22816 samples (1426 positives).
+2026-09-29 13:08:29,194 WARNING Cache save failed for khatri_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:30,274 INFO Trained on 24864 samples (1554 positives).
+2026-09-29 13:08:30,276 WARNING Cache save failed for laxmi_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:31,362 INFO Trained on 24752 samples (1547 positives).
+2026-09-29 13:08:31,366 WARNING Cache save failed for laxmi_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:32,865 INFO Trained on 35696 samples (2231 positives).
+2026-09-29 13:08:32,871 WARNING Cache save failed for lokseva_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:36,569 INFO Trained on 97232 samples (6077 positives).
+2026-09-29 13:08:36,580 WARNING Cache save failed for madhur_day: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:39,959 INFO Trained on 87728 samples (5483 positives).
+2026-09-29 13:08:39,971 WARNING Cache save failed for madhur_morning: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:41,873 INFO Trained on 53056 samples (3316 positives).
+2026-09-29 13:08:41,880 WARNING Cache save failed for madhur_night: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker
+2026-09-29 13:08:45,653 INFO Trained on 99216 samples (6201 positives).
+2026-09-29 13:08:45,665 WARNING Cache save failed for madhuri: Can't pickle <class '__main__.PannaRanker'>: it's not found as __main__.PannaRanker

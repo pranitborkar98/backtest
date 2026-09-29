@@ -156,12 +156,18 @@ def _engine_env(engine: str) -> dict:
     if hist.exists():
         # v50/v51 read SATTA_<KEY> for HISTORY_FILE/OUTPUT_DIR/STATE_FILE/LOG_FILE.
         env["SATTA_HISTORY_FILE"] = str(hist)
-    if engine.startswith("prediction_engine_v5"):   # v50/v51 unified engines
+    if engine in ("prediction_engine_v31.py", "prediction_engine_v32.py",
+                  "prediction_engine_v33.py", "prediction_engine_ml_panna_first.py",
+                  "prediction_engine_v50_unified.py", "prediction_engine_v51_unified.py"):
         eng_dir = TARGET_DIR / f"_bt_{label}"       # per-engine scratch (output/state/log/cache)
         eng_dir.mkdir(parents=True, exist_ok=True)
         env["SATTA_OUTPUT_DIR"] = str(eng_dir)
         env["SATTA_STATE_FILE"] = str(eng_dir / f"{stem}_state.json")
         env["SATTA_LOG_FILE"] = str(eng_dir / f"{stem}.log")
+        env["SATTA_ASSETS_DIR"] = str(eng_dir)      # never touch the Android assets folder
+        env["SATTA_TODAY_TEST_FILE"] = str(eng_dir / f"todays_predictions_{stem}_TEST.json")
+        env["SATTA_TODAY_PROD_FILE"] = str(eng_dir / f"todays_predictions_{stem}.json")
+        env["SATTA_TODAYS_PREDICTIONS_JSON"] = str(eng_dir / f"todays_predictions_{stem}.json")
         # Cap gradient-boosting iterations so the first cold run (no joblib
         # cache yet) trains each market ranker in seconds instead of minutes.
         # Cached models are keyed by data hash only, so delete _bt_* dirs after

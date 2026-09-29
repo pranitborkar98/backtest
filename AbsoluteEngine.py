@@ -31,8 +31,13 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "satta_data"
 STATE_DIR = BASE_DIR / "state"
 
+_BT_HIST_CANDIDATES = [Path(os.environ["SATTA_HISTORY_FILE"])] if os.environ.get("SATTA_HISTORY_FILE") else []
+_BT_HIST_CANDIDATES += [BASE_DIR / "all_markets_history.json", DATA_DIR / "all_markets_history.json"]
+_BT_HIST = next((_p for _p in _BT_HIST_CANDIDATES if _p.exists() and _p.stat().st_size > 0),
+                DATA_DIR / "all_markets_history.json")
+
 PATHS = {
-    "HISTORY_FILE": DATA_DIR / "all_markets_history.json",
+    "HISTORY_FILE": _BT_HIST,
     "OUTPUT_DIR": DATA_DIR / "output",
     "STATE_FILE": STATE_DIR / "absolute_engine_state.json",
     "TODAY_FILE": DATA_DIR / "todays_predictions.json",
@@ -424,6 +429,8 @@ def run(for_date: Optional[datetime.date] = None, dry_run: bool = False):
     else:
         log.info("Dry run complete. No files saved.")
 
+    return output
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Absolute SattaMatka AI Engine")
     parser.add_argument("--date", type=str, help="Override run date (YYYY-MM-DD)")
@@ -431,7 +438,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     run_date = parse_date(args.date) if args.date else None
-    run(for_date=run_date, dry_run=args.dry_run)
+    _bt_last = run(for_date=run_date, dry_run=args.dry_run)
+    globals()["output"] = _bt_last if isinstance(_bt_last, (dict, list)) else globals().get("output")
 
 # ==== BACKTEST LAB 1-LINER: unique dated output -> D:\backtest\predictions_<YYYY-MM-DD>_absolute.json ====
 try:
@@ -461,7 +469,7 @@ try:
                         ds = _v; break
         if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
             ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
-        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().as_posix()))
+        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if False else _bt_Path(__file__).resolve().parent))
         _bt_dir.mkdir(parents=True, exist_ok=True)
         _p = _bt_dir / f"predictions_{ds}_absolute.json"
         _t = _p.with_suffix(".json.tmp")
