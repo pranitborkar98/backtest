@@ -1,7 +1,11 @@
-# Compiled and build artifacts
+# Python
 __pycache__/
 *.pyc
+*.pyo
 
-# Temp directories
-tmp_smoke/
-tmp_verify/
+# ML/Cache artifacts
+output/ml_cache/
+*.joblib
+
+# Logs
+*.log
