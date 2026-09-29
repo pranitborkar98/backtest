@@ -33,9 +33,17 @@ warnings.filterwarnings('ignore')
 
 HISTORY_FILE = "all_markets_history.txt"
 import os as _bt_os, json as _bt_json
-if not _bt_os.path.exists(HISTORY_FILE) and _bt_os.path.exists("all_markets_history.json"):
-    # Backtest lab: engine was written for a .txt file; transparently use the JSON history.
-    HISTORY_FILE = "all_markets_history.json"
+# Backtest lab: resolve history relative to THIS script's folder (never depends on CWD),
+# prefer the JSON history the lab ships with, and allow SATTA_HISTORY_FILE override.
+_here = _bt_os.path.dirname(_bt_os.path.abspath(__file__))
+_bt_env_hist = _bt_os.environ.get("SATTA_HISTORY_FILE")
+for _cand in ([_bt_env_hist] if _bt_env_hist else []) + \
+             [_bt_os.path.join(_here, "all_markets_history.json"),
+              _bt_os.path.join(_here, "all_markets_history.txt"),
+              "all_markets_history.json", "all_markets_history.txt"]:
+    if _cand and _bt_os.path.exists(_cand):
+        HISTORY_FILE = _cand
+        break
 DASHBOARD_DIR = "./dashboards"
 os.makedirs(DASHBOARD_DIR, exist_ok=True)
 
