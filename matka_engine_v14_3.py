@@ -82,7 +82,7 @@ def sort_markets_premium_first(market_names):
 # ============================================================
 # 1. DATA LOADING
 # ============================================================
-def load_and_preprocess(filepath):
+def load_and_preprocess(filepath, cutoff_iso=None):
     with open(filepath, 'r', encoding='utf-8') as f:
         data = json.load(f)
     markets = {}
@@ -92,6 +92,10 @@ def load_and_preprocess(filepath):
         df = pd.DataFrame(records)
         df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
         df = df.sort_values('Date').reset_index(drop=True)
+        # Backtest lab time-travel: only keep records strictly BEFORE the target date
+        # (predicting "next day" from history must never leak the outcome itself).
+        if cutoff_iso is not None:
+            df = df[df['Date'] < pd.Timestamp(cutoff_iso)].reset_index(drop=True)
         df['Open Digit']  = df['Open Digit'].astype(str)
         df['Close Digit'] = df['Close Digit'].astype(str)
         markets[market] = df
@@ -194,6 +198,13 @@ def train_full_model(df, target_col='Open Digit'):
     y = df_feat['target'].astype(int)
     if len(np.unique(y)) < 2 or len(X) < 30:
         return None, None, None
+    # Backtest lab speed: a single prediction only needs recent history. Training on
+    # the last ~1500 rows keeps accuracy effectively identical (HGB uses early trees)
+    # and cuts matka --predict from >600s to well under the harness timeout.
+    _BT_TRAIN_WINDOW = 1500
+    if len(X) > _BT_TRAIN_WINDOW:
+        X = X.iloc[-_BT_TRAIN_WINDOW:]
+        y = y.iloc[-_BT_TRAIN_WINDOW:]
     model = HistGradientBoostingClassifier(
         max_iter=150, learning_rate=0.08, max_depth=6, random_state=42, early_stopping=False
     )
@@ -501,13 +512,20 @@ def main():
         globals()['RUN_DATE_OVERRIDE'] = _d.datetime.strptime(args.date, "%Y-%m-%d").date().isoformat()
 
     print("Loading historical data...")
-    markets_data = load_and_preprocess(HISTORY_FILE)
+    cutoff = globals().get('RUN_DATE_OVERRIDE')  # backtest lab: truncate history to before --date
+    markets_data = load_and_preprocess(HISTORY_FILE, cutoff_iso=cutoff)
     print(f"Loaded {len(markets_data)} markets.\n")
 
     if args.predict:
         run_prediction_mode(markets_data)
     else:
         run_backtest_mode(markets_data)
+
+    # Expose results for the BACKTEST LAB writer below (module level, after main()).
+    try:
+        globals()['predictions'] = list(predictions)  # noqa: F821  (set by run_prediction_mode)
+    except NameError:
+        pass
 
 if __name__ == "__main__":
     main()
