@@ -1,11 +1,2 @@
-# Compiled and build artifacts
-__pycache__/
-*.pyc
-
-# Temp directories
-tmp_smoke/
-tmp_verify/__pycache__/
-*.pyc
-labtest/
-tmp_smoke/
-tmp_verify/
+# Logs and temp files
+*.log
