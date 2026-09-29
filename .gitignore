@@ -4,4 +4,8 @@ __pycache__/
 
 # Temp directories
 tmp_smoke/
+tmp_verify/__pycache__/
+*.pyc
+labtest/
+tmp_smoke/
 tmp_verify/
