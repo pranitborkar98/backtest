@@ -409,7 +409,19 @@ def generate_predictions(history: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # ---------------- MAIN ----------------
-def main() -> List[str]:
+def _parse_bt_args():
+    """Backtest lab: this engine was written without argparse; accept the
+    harness contract '--date YYYY-MM-DD' (and ignore unknown flags) so it can
+    be time-travelled instead of always predicting 'today'."""
+    import argparse
+    ap = argparse.ArgumentParser(add_help=False)
+    ap.add_argument("--date", default=None)
+    ns, _unknown = ap.parse_known_args()
+    return ns
+
+
+def main(bt_date: Optional[str] = None) -> List[str]:
+    bt_date = bt_date or _parse_bt_args().date
     # ensure directories exist
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
     os.makedirs(OUTPUT_HISTORY, exist_ok=True)
@@ -424,7 +436,11 @@ def main() -> List[str]:
     # ---- load history (prefer sattaboss-data/data) ----
     history: Dict[str, Any] = {}
     history_path_used: Optional[str] = None
-    for p in HISTORY_CANDIDATES:
+    # Backtest lab: if a copy of the history sits next to this script (cwd), use it
+    # instead of the hardcoded production paths outside the repo.
+    _bt_hist = os.path.join(os.path.dirname(os.path.abspath(__file__)), "all_markets_history.json")
+    candidates = ([_bt_hist] if os.path.exists(_bt_hist) else []) + HISTORY_CANDIDATES
+    for p in candidates:
         if os.path.exists(p):
             history = load_json_safe(p) or {}
             history_path_used = p
@@ -432,6 +448,37 @@ def main() -> List[str]:
             break
     if not history:
         logging.warning("⚠️ No history file found in candidates — using empty history (no markets).")
+
+    # ---- time travel: cut history at --date so predictions never leak the future ----
+    if bt_date:
+        try:
+            cutoff = datetime.strptime(bt_date, "%Y-%m-%d").date()
+        except ValueError:
+            cutoff = None
+        if cutoff is not None:
+            def _rec_date(r):
+                d = str((r or {}).get("Date") or (r or {}).get("date") or "").strip()
+                parts = d.replace("/", "-").split("-")
+                if len(parts) == 3:
+                    try:
+                        if len(parts[0]) == 4:
+                            return datetime.strptime(d, "%Y-%m-%d").date()
+                        day, mon = int(parts[0]), int(parts[1])   # DD/MM/YYYY (lab convention)
+                        if mon > 12:                              # tolerate MM/DD/YYYY
+                            day, mon = mon, day
+                        return datetime(int(parts[2]), mon, day).date()
+                    except ValueError:
+                        return None
+                return None
+            trimmed = {}
+            for mkt, recs in history.items():
+                if isinstance(recs, list):
+                    keep = [r for r in recs if (rd := _rec_date(r)) is not None and rd < cutoff]
+                    trimmed[mkt] = keep
+                else:
+                    trimmed[mkt] = recs
+            history = trimmed
+            logging.info("⏪ Backtest mode: history truncated to dates before %s", bt_date)
 
     # ---- archive existing todays_predictions.json -> yesterday pointer ----
     try:
