@@ -157,7 +157,7 @@ def number(value, width):
     if isinstance(value, bool) or value is None:
         return None
     s = str(value).strip()
-    if not _bt_re.fullmatch(r"[0-9]{1," + str(width) + r"}", s):
+    if not re.fullmatch(r"[0-9]{1," + str(width) + r"}", s):
         return None
     return s.zfill(width)
 

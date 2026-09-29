@@ -124,24 +124,27 @@ ENGINE_LABELS = {
 }
 
 
-def run_one(engine: str, dt: str, dry: bool, skip_existing: bool = False) -> tuple[str, str, float, str]:
+def run_one(engine: str, dt: str, dry: bool, skip_existing: bool = False, timeout: int = 600) -> tuple[str, str, float, str]:
     if skip_existing and not dry:
         label = ENGINE_LABELS.get(engine, engine.replace(".py", ""))
         if (TARGET_DIR / f"predictions_{dt}_{label}.json").exists():
             return engine, dt, 0.0, "SKIP (file exists)"
     cmd = [sys.executable, str(HERE / engine), "--date", dt]
+    if engine in ("prediction_engine_v50_unified.py", "prediction_engine_v51_unified.py"):
+        # These engines accept --test-date, not --date.
+        cmd[3] = "--test-date"
     if dry:
         return engine, dt, 0.0, "DRY " + " ".join(cmd)
     t0 = time.time()
     try:
-        p = subprocess.run(cmd, cwd=str(HERE), capture_output=True, text=True, timeout=600)
+        p = subprocess.run(cmd, cwd=str(HERE), capture_output=True, text=True, timeout=timeout)
         el = time.time() - t0
         if p.returncode != 0:
             msg = (p.stderr or p.stdout or "").strip().splitlines()[-3:]
             return engine, dt, el, f"FAIL rc={p.returncode}: {' | '.join(msg)}"
         return engine, dt, el, "OK"
     except subprocess.TimeoutExpired:
-        return engine, dt, time.time() - t0, "FAIL timeout(600s)"
+        return engine, dt, time.time() - t0, f"FAIL timeout({timeout}s)"
     except Exception as e:  # noqa: BLE001
         return engine, dt, time.time() - t0, f"FAIL {e}"
 
@@ -156,6 +159,7 @@ def main() -> int:
     ap.add_argument("--engines", nargs="*", default=None, help="Subset of engine filenames")
     ap.add_argument("--dry-run", action="store_true", help="Print commands, execute nothing")
     ap.add_argument("--workers", type=int, default=1, help="Parallel engines per date (default 1)")
+    ap.add_argument("--timeout", type=int, default=600, help="Per-engine timeout in seconds (default 600; use 1800 for v4)")
     args = ap.parse_args()
 
     engines = args.engines or ENGINES
@@ -188,9 +192,9 @@ def main() -> int:
         print(f"\n[{i}/{len(dates)}] {dt}")
         if args.workers > 1:
             with ThreadPoolExecutor(max_workers=args.workers) as ex:
-                results = list(ex.map(lambda e: run_one(e, dt, args.dry_run, args.skip_existing), engines))
+                results = list(ex.map(lambda e: run_one(e, dt, args.dry_run, args.skip_existing, args.timeout), engines))
         else:
-            results = [run_one(e, dt, args.dry_run, args.skip_existing) for e in engines]
+            results = [run_one(e, dt, args.dry_run, args.skip_existing, args.timeout) for e in engines]
         for eng, _dt, el, status in results:
             done += 1
             if status.startswith("FAIL"):

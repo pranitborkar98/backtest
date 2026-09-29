@@ -32,6 +32,10 @@ import matplotlib.pyplot as plt
 warnings.filterwarnings('ignore')
 
 HISTORY_FILE = "all_markets_history.txt"
+import os as _bt_os, json as _bt_json
+if not _bt_os.path.exists(HISTORY_FILE) and _bt_os.path.exists("all_markets_history.json"):
+    # Backtest lab: engine was written for a .txt file; transparently use the JSON history.
+    HISTORY_FILE = "all_markets_history.json"
 DASHBOARD_DIR = "./dashboards"
 os.makedirs(DASHBOARD_DIR, exist_ok=True)
 
