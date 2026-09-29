@@ -146,14 +146,22 @@ EXTRA_ARGS = {
 }
 
 
-def _engine_env() -> dict:
+def _engine_env(engine: str) -> dict:
     """Point every engine at THIS folder so nothing writes to hardcoded C:\\ paths."""
     env = os.environ.copy()
     env["LAB_DIR"] = str(TARGET_DIR)                 # used by BACKTEST LAB output blocks
     hist = HERE / "all_markets_history.json"
+    label = ENGINE_LABELS.get(engine, engine.replace(".py", ""))
+    stem = Path(engine).stem
     if hist.exists():
-        # v50/v51 default to C:\Users\...\all_markets_history.json; override via their env prefix.
-        env.setdefault("SATTA_HISTORY_FILE", str(hist))
+        # v50/v51 read SATTA_<KEY> for HISTORY_FILE/OUTPUT_DIR/STATE_FILE/LOG_FILE.
+        env["SATTA_HISTORY_FILE"] = str(hist)
+    if engine.startswith("prediction_engine_v5"):   # v50/v51 unified engines
+        eng_dir = TARGET_DIR / f"_bt_{label}"       # per-engine scratch (output/state/log/cache)
+        eng_dir.mkdir(parents=True, exist_ok=True)
+        env["SATTA_OUTPUT_DIR"] = str(eng_dir)
+        env["SATTA_STATE_FILE"] = str(eng_dir / f"{stem}_state.json")
+        env["SATTA_LOG_FILE"] = str(eng_dir / f"{stem}.log")
     return env
 
 
@@ -168,7 +176,7 @@ def run_one(engine: str, dt: str, dry: bool, skip_existing: bool = False, timeou
     t0 = time.time()
     try:
         p = subprocess.run(cmd, cwd=str(HERE), capture_output=True, text=True,
-                           timeout=timeout, env=_engine_env())
+                           timeout=timeout, env=_engine_env(engine))
         el = time.time() - t0
         if p.returncode != 0:
             msg = (p.stderr or p.stdout or "").strip().splitlines()[-3:]

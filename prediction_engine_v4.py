@@ -490,6 +490,13 @@ def main(bt_date: Optional[str] = None) -> List[str]:
 
     # ---- generate predictions ----
     preds = generate_predictions(history)
+    if bt_date:
+        # Backtest lab time travel: stamp the target date so the dated output file
+        # is named predictions_<bt_date>_v4.json (and analyzer joins on the right day).
+        _meta = preds.setdefault("meta", {}) if isinstance(preds, dict) else None
+        if isinstance(_meta, dict):
+            _meta["prediction_date"] = bt_date
+            _meta["backtest_mode"] = True
 
 # ---- save to multiple destinations ----
     destinations = [
@@ -507,6 +514,9 @@ def main(bt_date: Optional[str] = None) -> List[str]:
             saved_paths.append(path)
         except Exception as e:
             logging.warning("Failed to save %s: %s", path, e)
+
+    # Backtest lab: expose the prediction payload for the module-level writer.
+    globals()['app_json'] = preds
 
     # also archive today's predictions copy
     try:
