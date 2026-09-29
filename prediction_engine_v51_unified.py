@@ -1424,7 +1424,17 @@ def build_arg_parser()->argparse.ArgumentParser:
     return p
 
 def main():
-    p=build_arg_parser(); args=p.parse_args()
+    p=build_arg_parser()
+    # Backtest lab compatibility: accept --date as an alias for --test-date.
+    known, remaining = p.parse_known_args()
+    if remaining:
+        p.add_argument("--date", dest="date_alias", default=None,
+                       help="Alias for --test-date (used by run_backtest.py)")
+        args = p.parse_args()
+        if args.date_alias and not args.test_date:
+            args.test_date = args.date_alias
+    else:
+        args = known
     if args.selftest: selftest(); return
     history_path=_resolve_path("HISTORY_FILE",args.history_file)
     output_dir=_resolve_path("OUTPUT_DIR",args.output_dir)
@@ -1439,6 +1449,13 @@ def main():
     try: validate_history_schema(all_hist)
     except Exception as e: logger.error(f"History validation failed: {e}"); sys.exit(1)
     state=load_state(state_path)
+    # Backtest lab: a past --test-date means "predict for that date only".
+    # Skip the expensive first-run walk-forward backtest (it retrains ML per day
+    # and can exceed 10 min); it is not needed to produce the dated prediction file.
+    _asof = parse_date(args.test_date) if args.test_date else None
+    if _asof is not None and _asof < datetime.date.today() and not args.skip_first_backtest:
+        args.skip_first_backtest = True
+        logger.info("Backtest mode: auto-skipping first-run walk-forward backtest for past date.")
     output=run_once(args,all_hist,state,output_dir)
     if args.prod: out_path=Path(_DEFAULTS["TODAY_PROD_FILE"])
     elif args.test: out_path=Path(_DEFAULTS["TODAY_TEST_FILE"])
@@ -1448,6 +1465,51 @@ def main():
     save_json_atomic(state_path,state)
     logger.info(f"State saved to {state_path}")
     if args.verbose: print(json.dumps(output,indent=2,default=str))
+    # ==== BACKTEST LAB 1-LINER: unique dated output -> D:\backtest\predictions_<YYYY-MM-DD>_v51_unified.json ====
+    # NOTE: must run INSIDE main() — the module-level copy below never executes,
+    # because __name__ is "__main__" when the script is run directly.
+    try:
+        _bt_write_dated(output, args)
+    except Exception as _bt_e:
+        print(f"[BACKTEST] skipped: {_bt_e}")
+
+
+def _bt_write_dated(out_obj, args=None):
+    import re as _bt_re
+    _m = (out_obj or {}).get("meta") or {} if isinstance(out_obj, dict) else {}
+    ds = str(_m.get("prediction_date") or _m.get("run_date") or _m.get("date") or _m.get("target_date") or "")
+    if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds) and isinstance(out_obj, dict):
+        _mlist = out_obj.get("markets") or []
+        if isinstance(_mlist, dict):
+            _cand = str(_mlist.get("Date") or "")
+            if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
+                ds = _cand
+        elif isinstance(_mlist, list):
+            for _mk in _mlist:
+                _cand = str((_mk.get("predictions") or {}).get("Date") if isinstance(_mk, dict) else "")
+                if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
+                    ds = _cand; break
+    if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+        _argv = list(sys.argv)
+        for _i, _a in enumerate(_argv):
+            if _a.startswith("--test-date") or _a.startswith("--date"):
+                _v = _a.split("=", 1)[1] if "=" in _a else (_argv[_i+1] if _i+1 < len(_argv) else "")
+                if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(_v)):
+                    ds = _v; break
+    if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+        _td = getattr(args, "test_date", None)
+        if _td and _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(_td)):
+            ds = str(_td)
+    if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+        ds = datetime.date.today().isoformat()
+    _bt_dir = Path(os.environ.get("LAB_DIR") or ("D:\\backtest" if (os.name == "nt" or os.path.splitdrive("D:\\")[0]) else Path(__file__).resolve().parent))
+    _bt_dir.mkdir(parents=True, exist_ok=True)
+    _p = _bt_dir / f"predictions_{ds}_v51_unified.json"
+    _t = _p.with_suffix(".json.tmp")
+    _t.write_text(json.dumps(out_obj, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    os.replace(_t, _p)
+    print(f"[BACKTEST] wrote {_p}")
+# ==== END BACKTEST LAB 1-LINER (active copy, called from main) ====
 
 if __name__=="__main__":
     main()

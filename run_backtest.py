@@ -21,6 +21,7 @@ Notes:
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -61,7 +62,8 @@ def _history_dates() -> list[str]:
         data = json.loads(hist.read_text(encoding="utf-8"))
     except Exception:
         return []
-    seen = set()
+    seen = set()                                   # normalized ISO dates
+    raw = []                                       # (year, a, b) halves of non-ISO dates
     for recs in data.values():
         if isinstance(recs, dict):                     # {"records": [...]} shape
             recs = recs.get("records") or recs.get("history") or []
@@ -74,16 +76,29 @@ def _history_dates() -> list[str]:
             if not d:
                 continue
             parts = d.replace("/", "-").split("-")
-            if len(parts) == 3:
-                a, b, c = parts
-                if len(a) == 4:            # already YYYY-MM-DD
-                    iso = f"{a}-{int(b):02d}-{int(c):02d}"
-                elif len(c) == 4:          # DD/MM/YYYY or MM/DD/YYYY
-                    mth, dy = (b, a) if int(b) <= 12 else (a, b)
-                    iso = f"{c}-{int(mth):02d}-{int(dy):02d}"
-                else:
-                    continue
-                seen.add(iso)
+            if len(parts) != 3:
+                continue
+            a, b, c = parts
+            try:
+                if len(a) == 4:                        # already YYYY-MM-DD
+                    seen.add(f"{a}-{int(b):02d}-{int(c):02d}")
+                elif len(c) == 4:                      # DD/MM/YYYY or MM/DD/YYYY
+                    raw.append((c, int(a), int(b)))
+            except ValueError:
+                continue
+    # Resolve DD/MM vs MM/DD ONCE from the whole file: whichever position ever
+    # exceeds 12 must be the day. (Per-date guessing silently mis-dates US-style
+    # data whenever both halves happen to be <= 12.)
+    first_gt12 = any(x > 12 for _, x, _ in raw)
+    second_gt12 = any(y > 12 for _, _, y in raw)
+    if first_gt12 and second_gt12:
+        print("WARNING: history dates are ambiguous (both positions exceed 12); "
+              "assuming DD/MM/YYYY")
+    day_is_first = first_gt12 or not second_gt12   # default DD/MM when unambiguous
+    for c, x, y in raw:
+        mth, dy = (y, x) if day_is_first else (x, y)
+        if 1 <= mth <= 12 and 1 <= dy <= 31:
+            seen.add(f"{c}-{mth:02d}-{dy:02d}")
     return sorted(seen)
 
 
@@ -124,24 +139,43 @@ ENGINE_LABELS = {
 }
 
 
+# Engines that need extra flags beyond the standard "--date YYYY-MM-DD" contract.
+# matka runs a full walk-forward backtest unless --predict is passed (=> 600s timeout).
+EXTRA_ARGS = {
+    "matka_engine_v14_3.py": ["--predict"],
+}
+
+
+def _engine_env() -> dict:
+    """Point every engine at THIS folder so nothing writes to hardcoded C:\\ paths."""
+    env = os.environ.copy()
+    env["LAB_DIR"] = str(TARGET_DIR)                 # used by BACKTEST LAB output blocks
+    hist = HERE / "all_markets_history.json"
+    if hist.exists():
+        # v50/v51 default to C:\Users\...\all_markets_history.json; override via their env prefix.
+        env.setdefault("SATTA_HISTORY_FILE", str(hist))
+    return env
+
+
 def run_one(engine: str, dt: str, dry: bool, skip_existing: bool = False, timeout: int = 600) -> tuple[str, str, float, str]:
-    if skip_existing and not dry:
-        label = ENGINE_LABELS.get(engine, engine.replace(".py", ""))
-        if (TARGET_DIR / f"predictions_{dt}_{label}.json").exists():
-            return engine, dt, 0.0, "SKIP (file exists)"
-    cmd = [sys.executable, str(HERE / engine), "--date", dt]
-    if engine in ("prediction_engine_v50_unified.py", "prediction_engine_v51_unified.py"):
-        # These engines accept --test-date, not --date.
-        cmd[3] = "--test-date"
+    label = ENGINE_LABELS.get(engine, engine.replace(".py", ""))
+    expected = TARGET_DIR / f"predictions_{dt}_{label}.json"
+    if skip_existing and not dry and expected.exists():
+        return engine, dt, 0.0, "SKIP (file exists)"
+    cmd = [sys.executable, str(HERE / engine), "--date", dt] + EXTRA_ARGS.get(engine, [])
     if dry:
         return engine, dt, 0.0, "DRY " + " ".join(cmd)
     t0 = time.time()
     try:
-        p = subprocess.run(cmd, cwd=str(HERE), capture_output=True, text=True, timeout=timeout)
+        p = subprocess.run(cmd, cwd=str(HERE), capture_output=True, text=True,
+                           timeout=timeout, env=_engine_env())
         el = time.time() - t0
         if p.returncode != 0:
             msg = (p.stderr or p.stdout or "").strip().splitlines()[-3:]
             return engine, dt, el, f"FAIL rc={p.returncode}: {' | '.join(msg)}"
+        # Self-validation: rc==0 alone is NOT enough — the dated output file must exist.
+        if not expected.exists():
+            return engine, dt, el, f"FAIL no output file: {expected.name}"
         return engine, dt, el, "OK"
     except subprocess.TimeoutExpired:
         return engine, dt, time.time() - t0, f"FAIL timeout({timeout}s)"
@@ -186,7 +220,7 @@ def main() -> int:
     if not args.dry_run:
         TARGET_DIR.mkdir(parents=True, exist_ok=True)
 
-    done = fails = 0
+    done = executed = fails = 0
     t_start = time.time()
     for i, dt in enumerate(dates, 1):
         print(f"\n[{i}/{len(dates)}] {dt}")
@@ -197,6 +231,8 @@ def main() -> int:
             results = [run_one(e, dt, args.dry_run, args.skip_existing, args.timeout) for e in engines]
         for eng, _dt, el, status in results:
             done += 1
+            if not (status.startswith("SKIP") or status.startswith("DRY")):
+                executed += 1
             if status.startswith("FAIL"):
                 fails += 1
                 with open(ERROR_LOG, "a", encoding="utf-8") as fh:
@@ -205,8 +241,9 @@ def main() -> int:
 
     mins = (time.time() - t_start) / 60
     produced = sorted(TARGET_DIR.glob("predictions_*.json")) if not args.dry_run else []
+    skipped = done - executed
     print("\n===== SUMMARY =====")
-    print(f"Runs attempted: {done} | failures: {fails} | elapsed: {mins:.1f} min")
+    print(f"Planned: {done} | executed: {executed} | skipped: {skipped} | failures: {fails} | elapsed: {mins:.1f} min")
     print(f"prediction_*.json files in {TARGET_DIR}: {len(produced)}")
     if fails:
         print(f"Failure details: {ERROR_LOG}")
