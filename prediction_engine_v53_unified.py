@@ -866,51 +866,57 @@ def main():
     if args.validation_days < 1 or args.warmup < 1:
         parser.error("--validation-days and --warmup must be positive")
     try:
-        run(args)
+        result = run(args)
     except (ValueError, OSError, sqlite3.Error) as exc:
         parser.exit(1, f"Engine failed: {exc}\n")
+    out_obj = result[0] if isinstance(result, tuple) else result
+    _bt_write(out_obj, getattr(args, "date", None))
 
 
-if __name__ == "__main__":
-    main()
-
-# ==== BACKTEST LAB 1-LINER: unique dated output -> D:\backtest\predictions_<YYYY-MM-DD>_v53_unified.json ====
-try:
+# ==== BACKTEST LAB 1-LINER: unique dated output -> predictions_<YYYY-MM-DD>_v53_unified.json ====
+def _bt_write(out_obj, d=None):
     import sys as _bt_sys, re as _bt_re, json as _bt_json, os as _bt_os, datetime as _bt_dt
     from pathlib import Path as _bt_Path
-    def _bt_write(out_obj, d=None):
-        # Resolve the prediction date: engine meta -> per-market "Date" -> CLI flag -> passed date -> today.
+    try:
         _m = (out_obj or {}).get("meta") or {} if isinstance(out_obj, dict) else {}
         ds = str(_m.get("prediction_date") or _m.get("run_date") or _m.get("date") or _m.get("target_date") or "")
-        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds) and isinstance(out_obj, dict):
+        if not _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", ds) and isinstance(out_obj, dict):
             _mlist = out_obj.get("markets") or []
             if isinstance(_mlist, dict):
                 _cand = str(_mlist.get("Date") or "")
-                if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
+                if _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", _cand):
                     ds = _cand
             elif isinstance(_mlist, list):
                 for _mk in _mlist:
                     _cand = str((_mk.get("predictions") or {}).get("Date") if isinstance(_mk, dict) else "")
-                    if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", _cand):
+                    if _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", _cand):
                         ds = _cand; break
-        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
+        if not _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", ds):
+            if isinstance(d, str) and _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", d):
+                ds = d
+            elif isinstance(d, _bt_dt.date):
+                ds = d.isoformat()
+        if not _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", ds):
             _argv = list(_bt_sys.argv)
             for _i, _a in enumerate(_argv):
                 if _a.startswith("--test-date") or _a.startswith("--date"):
                     _v = _a.split("=", 1)[1] if "=" in _a else (_argv[_i+1] if _i+1 < len(_argv) else "")
-                    if _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(_v)):
+                    if _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", str(_v)):
                         ds = _v; break
-        if not _bt_re.fullmatch(r"\d{4}-\d{2}-\d{2}", ds):
-            ds = d.isoformat() if isinstance(d, _bt_dt.date) else _bt_dt.date.today().isoformat()
-        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or ("D:\\backtest" if (_bt_os.name == "nt" or _bt_os.path.splitdrive("D:\\")[0]) else _bt_Path(__file__).resolve().as_posix()))
+        if not _bt_re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", ds):
+            ds = _bt_dt.date.today().isoformat()
+        _here = _bt_Path(__file__).resolve().parent
+        _bt_dir = _bt_Path(_bt_os.environ.get("LAB_DIR") or _here)
         _bt_dir.mkdir(parents=True, exist_ok=True)
         _p = _bt_dir / f"predictions_{ds}_v53_unified.json"
         _t = _p.with_suffix(".json.tmp")
         _t.write_text(_bt_json.dumps(out_obj, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
         _bt_os.replace(_t, _p)
         print(f"[BACKTEST] wrote {_p}")
-    if isinstance(globals().get('output'), dict):
-        _bt_write(output)
-except Exception as _bt_e:
-    print(f"[BACKTEST] skipped: {_bt_e}")
+    except Exception as _bt_e:
+        print(f"[BACKTEST] skipped: {_bt_e}")
 # ==== END BACKTEST LAB 1-LINER ====
+
+
+if __name__ == "__main__":
+    main()

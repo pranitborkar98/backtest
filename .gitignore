@@ -1,11 +1,2 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-
-# ML/Cache artifacts
-output/ml_cache/
-*.joblib
-
-# Logs
+# Logs and temp files
 *.log
